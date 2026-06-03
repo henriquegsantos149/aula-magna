@@ -1881,3 +1881,11 @@ a {
   color: var(--color-primary) !important; /* Destaque em ciano vibrante para leitura no fundo escuro */
 }
 
+/* Correção de legibilidade para o Grupo VIP em dobras claras */
+.bg-light-layer .vip-benefits-list li {
+  color: #475569;
+}
+.bg-light-layer .vip-benefits-list li i {
+  color: var(--color-secondary);
+}
+
