@@ -402,7 +402,7 @@ function initFormControls() {
   }
 
   // Form Submission
-  const WHATSAPP_VIP_LINK = "https://chat.whatsapp.com/GgSrVipGroupPlaceholder"; // EDIT THIS LINK to the actual WhatsApp group URL
+  const REDIRECT_TALLY_LINK = "https://tally.so/r/D4MLGb";
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -430,7 +430,7 @@ function initFormControls() {
 
     // Grab UTM params from URL
     const urlParams = new URLSearchParams(window.location.search);
-    const redirectUrl = new URL(WHATSAPP_VIP_LINK);
+    const redirectUrl = new URL(REDIRECT_TALLY_LINK);
     
     urlParams.forEach((val, key) => {
       const lowerKey = key.toLowerCase();
