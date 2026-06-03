@@ -375,6 +375,34 @@ function initFormControls() {
     }
   });
 
+  // Detailed Phone validation function
+  const validatePhone = (value) => {
+    const cleanValue = value.replace(/\D/g, '');
+    
+    if (cleanValue.length === 0) {
+      return { isValid: true, message: '' }; // Required attribute handles empty field
+    }
+    
+    if (cleanValue.length !== 11) {
+      return { isValid: false, message: 'O WhatsApp deve ter exatamente 11 dígitos (DDD + 9 + número).' };
+    }
+    
+    const ddd = cleanValue.substring(0, 2);
+    const ninthDigit = cleanValue.charAt(2);
+    
+    // DDDs in Brazil are 11-99, second digit cannot be 0
+    const dddRegex = /^[1-9][1-9]$/;
+    if (!dddRegex.test(ddd)) {
+      return { isValid: false, message: 'O DDD informado é inválido.' };
+    }
+    
+    if (ninthDigit !== '9') {
+      return { isValid: false, message: 'O número de celular deve começar com o dígito 9 (Ex: DD9XXXXXXXX).' };
+    }
+    
+    return { isValid: true, message: '' };
+  };
+
   // Strict Phone formatting and digits restriction (Exactly 11 digits)
   phoneInput.addEventListener('input', (e) => {
     let value = e.target.value.replace(/\D/g, ''); // Strip non-numeric
@@ -389,34 +417,27 @@ function initFormControls() {
   // Validate on blur (quietly, without reporting)
   phoneInput.addEventListener('blur', () => {
     const value = phoneInput.value;
-    if (value.length > 0 && value.length !== 11) {
-      phoneInput.setCustomValidity('O WhatsApp deve ter exatamente 11 dígitos numéricos com o DDD (Ex: 21999999999).');
+    const validation = validatePhone(value);
+    if (!validation.isValid) {
+      phoneInput.setCustomValidity(validation.message);
     } else {
       phoneInput.setCustomValidity('');
     }
   });
 
-  function validatePhoneInput() {
-    const value = phoneInput.value;
-    if (value.length !== 11) {
-      phoneInput.setCustomValidity('O WhatsApp deve ter exatamente 11 dígitos numéricos com o DDD (Ex: 21999999999).');
-      return false;
-    } else {
-      phoneInput.setCustomValidity('');
-      return true;
-    }
-  }
-
   // Form Submission
   const REDIRECT_TALLY_LINK = "https://tally.so/r/D4MLGb";
 
   form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    if (!validatePhoneInput()) {
-      phoneInput.reportValidity();
+    const validation = validatePhone(phoneInput.value);
+    if (!validation.isValid) {
+      e.preventDefault(); // Block submit
+      phoneInput.setCustomValidity(validation.message);
+      phoneInput.reportValidity(); // Show native bubble
       return;
     }
+
+    e.preventDefault();
 
     const submitBtn = document.getElementById('submit-btn');
     if (!submitBtn) return;
