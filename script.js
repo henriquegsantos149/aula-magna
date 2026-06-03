@@ -382,18 +382,24 @@ function initFormControls() {
       value = value.slice(0, 11);
     }
     e.target.value = value;
+    // Clear validation error while typing to allow correction
+    phoneInput.setCustomValidity('');
   });
 
-  // Validate on blur
+  // Validate on blur (quietly, without reporting)
   phoneInput.addEventListener('blur', () => {
-    validatePhoneInput();
+    const value = phoneInput.value;
+    if (value.length > 0 && value.length !== 11) {
+      phoneInput.setCustomValidity('O WhatsApp deve ter exatamente 11 dígitos numéricos com o DDD (Ex: 21999999999).');
+    } else {
+      phoneInput.setCustomValidity('');
+    }
   });
 
   function validatePhoneInput() {
     const value = phoneInput.value;
     if (value.length !== 11) {
       phoneInput.setCustomValidity('O WhatsApp deve ter exatamente 11 dígitos numéricos com o DDD (Ex: 21999999999).');
-      phoneInput.reportValidity();
       return false;
     } else {
       phoneInput.setCustomValidity('');
@@ -407,7 +413,10 @@ function initFormControls() {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    if (!validatePhoneInput()) return;
+    if (!validatePhoneInput()) {
+      phoneInput.reportValidity();
+      return;
+    }
 
     const submitBtn = document.getElementById('submit-btn');
     if (!submitBtn) return;
