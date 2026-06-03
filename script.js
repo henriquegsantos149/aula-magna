@@ -506,13 +506,7 @@ function initFormControls() {
       console.error('Network error during API subscription:', err);
     })
     .finally(() => {
-      submitBtn.innerHTML = '<i data-lucide="check-circle-2"></i> Sucesso! Redirecionando...';
-      if (typeof lucide !== 'undefined') lucide.createIcons();
-
-      // Open WhatsApp VIP group after subscription
-      setTimeout(() => {
-        window.location.href = redirectUrl.toString();
-      }, 1000);
+      window.location.href = redirectUrl.toString();
     });
   });
 }
