@@ -465,11 +465,49 @@ function initFormControls() {
     
     urlParams.forEach((val, key) => {
       const lowerKey = key.toLowerCase();
-      if (lowerKey.startsWith('utm_')) {
+      if (lowerKey.startsWith('utm_') || lowerKey.includes('_utm_')) {
         redirectUrl.searchParams.append(key, val);
         leadData[lowerKey] = val;
       }
     });
+
+    // Helper to find URL parameters with custom prefixes (e.g. L01ACAODEVITALICIO_UTM_SOURCE)
+    const getParamCaseInsensitive = (suffix) => {
+      const target = suffix.toLowerCase();
+      for (const [key, val] of urlParams.entries()) {
+        const lowerKey = key.toLowerCase();
+        if (lowerKey === target || lowerKey.endsWith('_' + target)) {
+          return val;
+        }
+      }
+      return '';
+    };
+
+    // Custom UTM and registration fields mapping
+    const customUtms = {
+      '[L18][PÓS][GGSR] Lead': 'Sim',
+      '[16h40][L18][PÓS][GGSR] UTM Term': getParamCaseInsensitive('utm_term'),
+      '[L18][PÓS][GGSR] UTM Data de Incrição': new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' }),
+      '[L18][PÓS][GGSR] UTM Possui Graduação': leadData.graduation || '',
+      '[L18][PÓS][GGSR] UTM Área de Formação': leadData.education_area || '',
+      '[L18][PÓS][GGSR] UTM Campaign': getParamCaseInsensitive('utm_campaign'),
+      '[L18][PÓS][GGSR] UTM Source': getParamCaseInsensitive('utm_source'),
+      '[16h44][L18][PÓS][GGSR] UTM Medium': getParamCaseInsensitive('utm_medium'),
+      '[16h44][L18][PÓS][GGSR] UTM Content': getParamCaseInsensitive('utm_content')
+    };
+
+    // Assign to lead data object sent to API
+    Object.assign(leadData, customUtms);
+
+    // Explicitly add tag fields to leadData payload for CRM integration
+    leadData.tags = ['[L18][PÓS][GGSR] Lead'];
+    leadData.tag = '[L18][PÓS][GGSR] Lead';
+
+    // Append to redirect Tally URL search parameters
+    Object.entries(customUtms).forEach(([key, val]) => {
+      redirectUrl.searchParams.append(key, val);
+    });
+
 
     // GTM DataLayer Push
     if (window.dataLayer) {
