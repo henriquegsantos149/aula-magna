@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   initHeader();
   initMobileMenu();
+  initSmoothScroll();
   initAccordions();
   initScrollReveal();
   initCarousels();
@@ -524,3 +525,35 @@ inlineStyle.textContent = `
   }
 `;
 document.head.appendChild(inlineStyle);
+
+// 8. Smooth Scroll without Hash in URL
+function initSmoothScroll() {
+  const anchors = document.querySelectorAll('a[href^="#"]');
+  anchors.forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      
+      if (targetId === '#' || targetId === '') {
+        e.preventDefault();
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+        return;
+      }
+      
+      try {
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          e.preventDefault();
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      } catch (err) {
+        console.warn('Invalid selector for smooth scroll:', targetId);
+      }
+    });
+  });
+}
