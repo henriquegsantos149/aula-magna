@@ -481,15 +481,6 @@ function initFormControls() {
       });
     }
 
-    // Meta Pixel Lead Event
-    if (typeof fbq === 'function') {
-      fbq('track', 'Lead', {
-        content_name: 'Aula Magna GGSR',
-        value: 0.00,
-        currency: 'BRL'
-      });
-    }
-
     // Call subscribe API (like Curso webgis)
     fetch('/api/subscribe', {
       method: 'POST',

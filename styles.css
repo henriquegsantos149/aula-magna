@@ -526,7 +526,7 @@ a {
     linear-gradient(180deg, rgba(12, 15, 25, 0.91) 0%, rgba(12, 15, 25, 0.97) 100%), 
     linear-gradient(rgba(41, 167, 217, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(41, 167, 217, 0.03) 1px, transparent 1px),
-    url('./hero_background.png');
+    url('./hero_background.webp');
   background-size: 100% 100%, 45px 45px, 45px 45px, cover;
   background-position: center, center, center, center;
   background-repeat: no-repeat;
