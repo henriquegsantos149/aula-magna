@@ -10,7 +10,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        vendas: resolve(__dirname, 'pagina-de-vendas.html')
+        matricula: resolve(__dirname, 'pagina-de-matricula.html')
       }
     }
   }
