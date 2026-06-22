@@ -829,8 +829,9 @@
   <script type="module" src="/script.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      const date23 = new Date('2026-06-23T23:59:59').getTime();
-      const date26 = new Date('2026-06-26T23:59:59').getTime();
+      const start23 = new Date('2026-06-23T00:00:00').getTime();
+      const end23 = new Date('2026-06-23T23:59:59').getTime();
+      const end26 = new Date('2026-06-26T23:59:59').getTime();
       
       const countdownContainer = document.getElementById('oferta-countdown-container');
       const countdownText = document.getElementById('oferta-countdown-text');
@@ -844,8 +845,10 @@
         
         const urlParams = new URLSearchParams(window.location.search);
         const debugDay = urlParams.get('dia');
-        if (debugDay === '23') {
+        if (debugDay === '22') {
           now = new Date('2026-06-22T12:00:00').getTime();
+        } else if (debugDay === '23') {
+          now = new Date('2026-06-23T12:00:00').getTime();
         } else if (debugDay === '26') {
           now = new Date('2026-06-25T12:00:00').getTime();
         }
@@ -853,11 +856,13 @@
         let targetDate = null;
         let text = "";
 
-        if (now < date23) {
-          targetDate = date23;
+        if (now < start23) {
+          targetDate = null;
+        } else if (now < end23) {
+          targetDate = end23;
           text = "Fim da oferta de Acesso ao PAP e F2W vitalício inclusos em:";
-        } else if (now < date26) {
-          targetDate = date26;
+        } else if (now < end26) {
+          targetDate = end26;
           text = "Fim da oferta em:";
         }
 
