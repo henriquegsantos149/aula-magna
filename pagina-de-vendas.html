@@ -153,15 +153,28 @@
               <p class="card-subtitle">Garanta sua vaga com nossa oferta exclusiva.</p>
             </div>
             
-            <div class="pricing-block text-center" style="margin-bottom: 24px;">
-              <div style="font-size: 1.1rem; text-decoration: line-through; color: rgba(255, 255, 255, 0.6); margin-bottom: 4px;">De R$ 5.000,00</div>
-              <div style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 8px;">Por R$ 1.997,00</div>
-              <div style="font-size: 1rem; color: var(--primary-color);">ou 12x de R$ 199,70</div>
+            <div id="oferta-countdown-container" class="text-center hidden" style="margin-bottom: 20px; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--color-accent); border-radius: 8px; padding: 15px;">
+              <p id="oferta-countdown-text" style="color: #fff; font-weight: bold; margin-bottom: 10px; font-size: 0.95rem;"></p>
+              <div style="display: flex; justify-content: center; gap: 15px; font-family: monospace; font-size: 1.5rem; font-weight: bold; color: var(--color-primary);">
+                <div><span id="cd-days">00</span><div style="font-size: 0.7rem; font-family: var(--font-body); color: var(--color-text-muted);">DIAS</div></div>:
+                <div><span id="cd-hours">00</span><div style="font-size: 0.7rem; font-family: var(--font-body); color: var(--color-text-muted);">HORAS</div></div>:
+                <div><span id="cd-minutes">00</span><div style="font-size: 0.7rem; font-family: var(--font-body); color: var(--color-text-muted);">MIN</div></div>:
+                <div><span id="cd-seconds">00</span><div style="font-size: 0.7rem; font-family: var(--font-body); color: var(--color-text-muted);">SEG</div></div>
+              </div>
             </div>
 
-            <button type="button" class="btn btn-primary btn-block btn-lg btn-glow pulse-glow">
-              Compre Agora <i data-lucide="shopping-cart"></i>
-            </button>
+            <div class="pricing-block text-center" style="margin-bottom: 24px;">
+              <div style="font-size: 1.1rem; text-decoration: line-through; color: rgba(255, 255, 255, 0.6); margin-bottom: 4px;">De 12x de R$ 797,00</div>
+              <div style="font-size: 2.5rem; font-weight: 800; color: #fff; margin-bottom: 8px;">12x de R$ 497,00</div>
+              <div style="font-size: 1rem; color: var(--primary-color);">ou R$ 4.970,00 à vista</div>
+            </div>
+
+            <a href="https://pay.voompcreators.com.br/4664/?cupom=MAGNAESPECIAL" class="btn btn-primary btn-block btn-lg btn-glow pulse-glow" style="margin-bottom: 16px;">
+              Matricule-se agora <i data-lucide="shopping-cart"></i>
+            </a>
+            <a href="https://api.whatsapp.com/send?phone=5521988374133&text=Ainda%20tenho%20d%C3%BAvidas%20sobre%20a%20oferta%20da%20p%C3%B3s-gradua%C3%A7%C3%A3o%20na%20aula%20magna%20do%20dia%2023%2F06" target="_blank" class="btn btn-secondary-outline btn-block">
+              Quero falar com a equipe <i data-lucide="message-circle"></i>
+            </a>
             <p class="security-text" style="margin-top: 16px;">
               <i data-lucide="shield-alert"></i> Compra 100% segura. Acesso imediato.
             </p>
@@ -814,5 +827,63 @@
 
   <!-- Scripts -->
   <script type="module" src="/script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const date23 = new Date('2026-06-23T23:59:59').getTime();
+      const date26 = new Date('2026-06-26T23:59:59').getTime();
+      
+      const countdownContainer = document.getElementById('oferta-countdown-container');
+      const countdownText = document.getElementById('oferta-countdown-text');
+      const cdDays = document.getElementById("cd-days");
+      const cdHours = document.getElementById("cd-hours");
+      const cdMinutes = document.getElementById("cd-minutes");
+      const cdSeconds = document.getElementById("cd-seconds");
+
+      function updateTimer() {
+        let now = new Date().getTime();
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const debugDay = urlParams.get('dia');
+        if (debugDay === '23') {
+          now = new Date('2026-06-22T12:00:00').getTime();
+        } else if (debugDay === '26') {
+          now = new Date('2026-06-25T12:00:00').getTime();
+        }
+        
+        let targetDate = null;
+        let text = "";
+
+        if (now < date23) {
+          targetDate = date23;
+          text = "Fim da oferta de Acesso ao PAP e F2W vitalício inclusos em:";
+        } else if (now < date26) {
+          targetDate = date26;
+          text = "Fim da oferta em:";
+        }
+
+        if (targetDate) {
+          countdownContainer.classList.remove('hidden');
+          countdownText.innerText = text;
+          
+          const distance = targetDate - now;
+          
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+          
+          cdDays.innerText = days.toString().padStart(2, '0');
+          cdHours.innerText = hours.toString().padStart(2, '0');
+          cdMinutes.innerText = minutes.toString().padStart(2, '0');
+          cdSeconds.innerText = seconds.toString().padStart(2, '0');
+        } else {
+          countdownContainer.classList.add('hidden');
+        }
+      }
+
+      updateTimer();
+      setInterval(updateTimer, 1000);
+    });
+  </script>
 </body>
 </html>
