@@ -178,10 +178,7 @@
                 style="color: #fff; font-weight: bold; margin-bottom: 10px; font-size: 0.95rem;"></p>
               <div
                 style="display: flex; justify-content: center; gap: 15px; font-family: monospace; font-size: 1.5rem; font-weight: bold; color: var(--color-primary);">
-                <div><span id="cd-days">00</span>
-                  <div style="font-size: 0.7rem; font-family: var(--font-body); color: var(--color-text-muted);">DIAS
-                  </div>
-                </div>:
+
                 <div><span id="cd-hours">00</span>
                   <div style="font-size: 0.7rem; font-family: var(--font-body); color: var(--color-text-muted);">HORAS
                   </div>
@@ -934,7 +931,7 @@
 
       const countdownContainer = document.getElementById('oferta-countdown-container');
       const countdownText = document.getElementById('oferta-countdown-text');
-      const cdDays = document.getElementById("cd-days");
+
       const cdHours = document.getElementById("cd-hours");
       const cdMinutes = document.getElementById("cd-minutes");
       const cdSeconds = document.getElementById("cd-seconds");
@@ -971,13 +968,11 @@
 
           const distance = targetDate - now;
 
-          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const totalHours = Math.floor(distance / (1000 * 60 * 60));
           const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
           const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-          cdDays.innerText = days.toString().padStart(2, '0');
-          cdHours.innerText = hours.toString().padStart(2, '0');
+          cdHours.innerText = totalHours.toString().padStart(2, '0');
           cdMinutes.innerText = minutes.toString().padStart(2, '0');
           cdSeconds.innerText = seconds.toString().padStart(2, '0');
         } else {
