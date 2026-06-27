@@ -202,10 +202,7 @@
               <div style="font-size: 1rem; color: var(--primary-color);">ou R$ 4.970,00 à vista</div>
             </div>
 
-            <a href="https://pay.voompcreators.com.br/12211/offer/4H3qrc/?cupom=MAGNAESPECIAL"
-              class="btn btn-primary btn-block btn-lg btn-glow pulse-glow" style="margin-bottom: 16px;">
-              Matricule-se agora <i data-lucide="shopping-cart"></i>
-            </a>
+
             <a href="https://api.whatsapp.com/send?phone=5521988374133&text=Ainda%20tenho%20d%C3%BAvidas%20sobre%20a%20oferta%20da%20p%C3%B3s-gradua%C3%A7%C3%A3o%20na%20aula%20magna%20do%20dia%2023%2F06"
               target="_blank" class="btn btn-secondary-outline btn-block">
               Quero falar com a equipe <i data-lucide="message-circle"></i>
@@ -932,6 +929,7 @@
 
       const countdownContainer = document.getElementById('oferta-countdown-container');
       const countdownText = document.getElementById('oferta-countdown-text');
+      const checkoutBtn = document.getElementById('checkout-btn');
 
       const cdHours = document.getElementById("cd-hours");
       const cdMinutes = document.getElementById("cd-minutes");
@@ -980,6 +978,14 @@
           cdSeconds.innerText = seconds.toString().padStart(2, '0');
         } else {
           countdownContainer.classList.add('hidden');
+        }
+
+        if (checkoutBtn) {
+          if (now > end26) {
+            checkoutBtn.style.display = 'none';
+          } else {
+            checkoutBtn.style.display = '';
+          }
         }
       }
 

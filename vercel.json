@@ -1,3 +1,15 @@
 {
-  "cleanUrls": true
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/pagina-de-matricula",
+      "destination": "https://ambientalpro.com.br",
+      "permanent": true
+    },
+    {
+      "source": "/pagina-de-matricula.html",
+      "destination": "https://ambientalpro.com.br",
+      "permanent": true
+    }
+  ]
 }
