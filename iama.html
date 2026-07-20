@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Participe da Aula Magna gratuita da Pós-Graduação em Inteligência Artificial Aplicada ao Meio Ambiente (IA.MA) e garanta sua vaga com oferta exclusiva da Ambiental Pro.">
+  <meta name="keywords" content="Inteligência Artificial, Meio Ambiente, IA.MA, IA, Pós-Graduação, MEC, Ambiental Pro, EAD">
+  <meta name="author" content="Ambiental Pro">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.lp.ambientalpro.com.br/pos-graduacao-iama">
+  <meta property="og:title" content="Aula Magna — Pós-Graduação IA.MA | Ambiental Pro">
+  <meta property="og:description" content="Participe gratuitamente da Aula Magna e confira os detalhes para se tornar um Especialista IA.MA chancelado pelo MEC.">
+  <meta property="og:image" content="/logo.webp">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="Aula Magna — Pós-Graduação IA.MA | Ambiental Pro">
+  <meta property="twitter:description" content="Participe gratuitamente da Aula Magna e confira os detalhes para se tornar um Especialista IA.MA chancelado pelo MEC.">
+  <meta property="twitter:image" content="/logo.webp">
+
+  <title>Aula Magna - Pós-Graduação IA.MA</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="/favicon.webp">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/iama-styles.css">
+  
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <!-- Background Glow FX -->
+  <div class="glow-bg-container">
+    <div class="glow-bg-radial primary-glow"></div>
+    <div class="glow-bg-radial accent-glow"></div>
+    <div class="glow-bg-radial third-glow"></div>
+  </div>
+
+  <!-- Header -->
+  <header id="main-header" class="site-header">
+    <div class="container header-container">
+      <div class="logo-wrapper">
+        <a href="#hero">
+          <img src="/logo.webp" alt="Logo Pós IA.MA" class="site-logo-full">
+        </a>
+      </div>
+      <nav class="nav-menu" id="site-nav">
+        <ul>
+          <li><a href="#detalhes" class="nav-link">A Pós-Graduação</a></li>
+          <li><a href="#grade" class="nav-link">Disciplinas</a></li>
+          <li><a href="#validacao" class="nav-link">MEC</a></li>
+          <li><a href="#mentores" class="nav-link">Mentores</a></li>
+          <li><a href="#depoimentos" class="nav-link">Depoimentos</a></li>
+          <li><a href="#faq" class="nav-link">Dúvidas</a></li>
+        </ul>
+      </nav>
+      <div class="header-cta">
+        <a href="#inscricao" class="btn btn-secondary-outline btn-sm">Garantir Vaga</a>
+      </div>
+      <button class="mobile-menu-toggle" id="mobile-menu-btn" aria-label="Abrir Menu">
+        <i data-lucide="menu"></i>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+      <div class="container hero-container">
+        <div class="hero-content reveal">
+          <div class="badge">
+            <span class="badge-dot"></span>
+            <span class="badge-text">Aula Magna Gratuita • Em Breve</span>
+          </div>
+          <h1 class="hero-title">
+            Aula Magna da Pós-Graduação em <span class="gradient-text">IA.MA</span>
+          </h1>
+          <p class="hero-subtitle">
+            Aprenda a arquitetar sistemas de IA e criar soluções automatizadas aplicadas ao setor ambiental. Participe da Aula Magna gratuita e descubra como liderar o mercado.
+          </p>
+          
+          <div class="hero-highlights">
+            <div class="h-item">
+              <i data-lucide="monitor" class="h-icon"></i>
+              <span>100% Online</span>
+            </div>
+            <div class="h-item">
+              <i data-lucide="award" class="h-icon"></i>
+              <span>Diploma do MEC (Nota 5)</span>
+            </div>
+            <div class="h-item">
+              <i data-lucide="terminal" class="h-icon"></i>
+              <span>Portfólio Prático</span>
+            </div>
+          </div>
+
+          <div class="hero-social-proof">
+            <div class="avatars-group">
+              <span class="avatar-placeholder">80k+</span>
+            </div>
+            <p class="social-proof-text">Junte-se a mais de <strong>80.000 profissionais</strong> capacitados pela Ambiental Pro.</p>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal delay-1">
+          <div id="inscricao" class="registration-card glassmorphism">
+            <div class="card-glow-top"></div>
+            <div class="text-center" style="margin-bottom: 20px;">
+              <h3 class="card-title">Inscreva-se Grátis</h3>
+              <p class="card-subtitle">Receba o link de transmissão da Aula Magna e a oferta exclusiva no grupo VIP.</p>
+            </div>
+            
+            <form id="enrollment-form" class="registration-form">
+              <div class="form-group">
+                <input type="text" id="user-name" name="nome" placeholder="Seu nome" required>
+              </div>
+              
+              <div class="form-group">
+                <input type="email" id="user-email" name="email" placeholder="Seu e-mail" required>
+              </div>
+
+              <div class="form-group">
+                <input type="tel" id="user-whatsapp" name="telefone" placeholder="Seu WhatsApp (com DDD)" required>
+              </div>
+
+              <div class="form-group">
+                <select id="user-graduation" name="graduacao" required>
+                  <option value="" disabled selected>Você possui graduação completa?</option>
+                  <option value="Sim">Sim</option>
+                  <option value="Não">Não</option>
+                </select>
+              </div>
+
+              <div class="form-group" id="education-area-group">
+                <input type="text" id="user-education-area" name="area_formacao" placeholder="Qual a sua área de formação?">
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-block btn-lg btn-glow pulse-glow" id="submit-btn">
+                Quero Participar Gratuitamente <i data-lucide="arrow-right"></i>
+              </button>
+            </form>
+            
+            <!-- Success Message Container -->
+            <div id="form-success-message" class="form-success-container hidden text-center" style="padding: 20px 0;">
+              <div class="success-icon-wrapper" style="margin-bottom: 16px;">
+                <i data-lucide="check-circle" class="success-icon" style="width: 48px; height: 48px; color: var(--color-primary);"></i>
+              </div>
+              <h4 class="success-title" style="font-size: 1.5rem; font-weight: 700; margin-bottom: 8px;">Inscrição Confirmada!</h4>
+              <p class="success-desc" style="color: var(--color-text-muted); margin-bottom: 24px;">Você foi inscrito com sucesso para a Aula Magna.</p>
+              <a href="https://wa.link/ambientalpro-vip" target="_blank" class="btn btn-primary btn-block btn-lg btn-glow pulse-glow" style="display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+                Entrar no Grupo VIP <i data-lucide="message-square"></i>
+              </a>
+            </div>
+
+            <p class="security-text" id="security-info">
+              <i data-lucide="shield-alert"></i> Seus dados estão 100% seguros sob a LGPD.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Group VIP Section -->
+    <section class="section-padding group-vip-section bg-light-layer">
+      <div class="container max-w-lg text-center reveal">
+        <div class="vip-card-box glassmorphism">
+          <div class="card-glow-top"></div>
+          <div class="vip-icon-wrapper">
+            <i data-lucide="users"></i>
+          </div>
+          <h2>Acesso Exclusivo ao Grupo VIP</h2>
+          <p>Após preencher os dados de inscrição acima, você terá acesso ao nosso grupo fechado no WhatsApp. Lá nós compartilharemos:</p>
+          <ul class="vip-benefits-list">
+            <li><i data-lucide="check"></i> O link direto da transmissão da Aula Magna sem interrupções.</li>
+            <li><i data-lucide="check"></i> Os materiais de apoio, slides e e-books da aula.</li>
+            <li><i data-lucide="check"></i> Em primeira mão, as condições exclusivas e o desconto para a nova turma.</li>
+          </ul>
+          <a href="#hero" class="btn btn-primary btn-lg btn-glow">Inscrever-se na Aula Magna Agora</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Details Section -->
+    <section id="detalhes" class="section-padding details-section bg-dark-layer">
+      <div class="container">
+        <div class="section-header text-center reveal">
+          <h2 class="section-title">O que você precisa saber sobre a <span class="gradient-text">Pós-Graduação IA.MA</span></h2>
+          <p class="section-desc">Uma especialização profissional completa, estruturada para conectar a teoria ambiental ao desenvolvimento de IA de ponta com máxima flexibilidade.</p>
+        </div>
+
+        <div class="details-grid reveal delay-1">
+          <!-- Card 1 -->
+          <div class="detail-card glassmorphism">
+            <div class="detail-icon"><i data-lucide="video"></i></div>
+            <h3>Aulas EAD 100% Online</h3>
+            <p>Assista e pratique no seu próprio ritmo, com acesso na plataforma 24 horas por dia.</p>
+          </div>
+          <!-- Card 2 -->
+          <div class="detail-card glassmorphism">
+            <div class="detail-icon"><i data-lucide="calendar"></i></div>
+            <h3>Duração de 12 Meses</h3>
+            <p>Conclua a sua especialização e conquiste seu título de especialista em apenas 1 ano.</p>
+          </div>
+          <!-- Card 3 -->
+          <div class="detail-card glassmorphism">
+            <div class="detail-icon"><i data-lucide="clock"></i></div>
+            <h3>Carga Horária de 440h</h3>
+            <p>Conteúdo completo do básico ao avançado com foco prático de mercado.</p>
+          </div>
+          <!-- Card 4 -->
+          <div class="detail-card glassmorphism">
+            <div class="detail-icon"><i data-lucide="terminal"></i></div>
+            <h3>Portfólio em Produção</h3>
+            <p>Diga adeus ao TCC tradicional. Sua entrega final será um portfólio de sistemas de IA funcionais.</p>
+          </div>
+          <!-- Card 5 -->
+          <div class="detail-card glassmorphism">
+            <div class="detail-icon"><i data-lucide="gem"></i></div>
+            <h3>Título Profissional</h3>
+            <p>Torne-se um Especialista em Inteligência Artificial Aplicada ao Meio Ambiente.</p>
+          </div>
+          <!-- Card 6 -->
+          <div class="detail-card glassmorphism">
+            <div class="detail-icon"><i data-lucide="graduation-cap"></i></div>
+            <h3>Diploma chancelado MEC</h3>
+            <p>Especialização registrada de peso chancelada pela Anhanguera (Nota Máxima 5).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Infinite Carousel Strip -->
+    <div class="nexos-carousel-container">
+      <div class="nexos-carousel-track">
+        <div class="grupo">
+          <span>INTELIGÊNCIA ARTIFICIAL</span><span>IA.MA</span>
+          <span>AGENTES COGNITIVOS</span><span>IA.MA</span>
+          <span>MODELOS PREDITIVOS</span><span>IA.MA</span>
+          <span>VISÃO COMPUTACIONAL</span><span>IA.MA</span>
+          <span>INTEGRAÇÃO COM LLMS</span><span>IA.MA</span>
+        </div>
+        <div class="grupo">
+          <span>INTELIGÊNCIA ARTIFICIAL</span><span>IA.MA</span>
+          <span>AGENTES COGNITIVOS</span><span>IA.MA</span>
+          <span>MODELOS PREDITIVOS</span><span>IA.MA</span>
+          <span>VISÃO COMPUTACIONAL</span><span>IA.MA</span>
+          <span>INTEGRAÇÃO COM LLMS</span><span>IA.MA</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Details/Problem Section -->
+    <section id="problema" class="diagnostic-section bg-light-layer">
+      <div class="container">
+        <div class="diagnostic-grid">
+          <!-- Dores -->
+          <div class="diagnostic-content reveal">
+            <div class="diagnostic-badge">
+              <i data-lucide="alert-circle" class="w-5 h-5"></i>
+              <span>O Diagnóstico do Setor</span>
+            </div>
+            <h2 class="section-title diagnostic-title" style="color: var(--color-brand-dark); text-align: left; margin-bottom: 16px;">
+              As três camadas de gargalo do <span class="gradient-text">profissional ambiental</span>
+            </h2>
+            <p class="section-desc diagnostic-desc" style="color: var(--color-brand-dark); opacity: 0.85; margin-bottom: 32px; font-size: 1.1rem; line-height: 1.6;">
+              A forma como o mercado atua mudou. E o profissional tradicional enfrenta novos obstáculos.
+            </p>
+
+            <div class="gargalos-list">
+              <!-- Gargalo 1 -->
+              <div class="gargalo-card">
+                <h3>1. Gargalo Operacional (O Mar de PDFs)</h3>
+                <p>
+                  Processar laudos e planilhas de forma manual é lento e ineficiente. Sem automação, o especialista consome seu tempo em digitação e tarefas repetitivas.
+                </p>
+              </div>
+              <!-- Gargalo 2 -->
+              <div class="gargalo-card">
+                <h3>2. Gargalo Econômico (A Escala de Horas)</h3>
+                <p>
+                  Depender de softwares genéricos ou desenvolvedores caros limita o faturamento. Sem autonomia técnica, o especialista deixa a margem de lucro com intermediários.
+                </p>
+              </div>
+              <!-- Gargalo 3 -->
+              <div class="gargalo-card">
+                <h3>3. Gargalo Estratégico (Comoditização)</h3>
+                <p>
+                  A inteligência artificial básica já substitui análises rotineiras. A única proteção real é evoluir para arquitetar e automatizar suas próprias soluções de IA.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Big Idea / Objetivo -->
+          <div class="featured-idea-wrapper reveal delay-1">
+            <div class="featured-idea-card">
+              <div class="featured-idea-text">
+                <p class="featured-quote">
+                  "De quem descreve o problema a quem constrói o sistema."
+                </p>
+                <p>
+                  A IA eliminou a barreira técnica. Quem vive o problema em campo agora tem o poder de criar o próprio sistema para resolvê-lo.
+                </p>
+                <p>
+                  Esta janela de oportunidade é única e não ficará aberta para sempre no mercado ambiental.
+                </p>
+              </div>
+              <div class="featured-footer">
+                <i data-lucide="trending-up" class="w-5 h-5 shrink-0"></i>
+                <span>Essa pós é o seu hedge contra a comoditização da profissão.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Curriculum Grade Section -->
+    <section id="grade" class="section-padding curriculum-section bg-dark-layer">
+      <div class="container">
+        <div class="section-header text-center reveal">
+          <h2 class="section-title">Eixos Temáticos: <span class="gradient-text">11 Disciplinas Estruturadas</span></h2>
+          <p class="section-desc">Uma jornada de aprendizado do básico ao avançado, abordando dados, RAG, IoT, visão computacional e agentes inteligentes de IA.</p>
+        </div>
+
+        <div class="curriculum-accordion-list reveal delay-1">
+          <!-- Item 1 -->
+          <div class="accordion-item">
+            <button class="accordion-toggle" aria-expanded="false" aria-controls="content-1">
+              <span class="module-number">01</span>
+              <span class="module-title">Fundamentos de Inteligência Artificial e Machine Learning</span>
+              <span class="accordion-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="accordion-content" id="content-1" aria-hidden="true">
+              <div class="accordion-body">
+                <p>Compreender os algoritmos e modelos matemáticos preditivos fundamentais da IA e do Aprendizado de Máquina. Foco prático em definições, estruturas de treinamento, evolução computacional e otimização.</p>
+              </div>
+            </div>
+          </div>
+          <!-- Item 2 -->
+          <div class="accordion-item">
+            <button class="accordion-toggle" aria-expanded="false" aria-controls="content-2">
+              <span class="module-number">02</span>
+              <span class="module-title">Arquitetura de Dados Ambientais</span>
+              <span class="accordion-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="accordion-content" id="content-2" aria-hidden="true">
+              <div class="accordion-body">
+                <p>Processar e estruturar grandes volumes de documentos (PDFs, laudos e licenças). Estruturação de bancos de dados para suporte a modelos de linguagem (LLMs) e fluxos de Recuperação Aumentada por Geração (RAG).</p>
+              </div>
+            </div>
+          </div>
+          <!-- Item 3 -->
+          <div class="accordion-item">
+            <button class="accordion-toggle" aria-expanded="false" aria-controls="content-3">
+              <span class="module-number">03</span>
+              <span class="module-title">IA Generativa na Elaboração de Estudos Ambientais</span>
+              <span class="accordion-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="accordion-content" id="content-3" aria-hidden="true">
+              <div class="accordion-body">
+                <p>Utilizar modelos generativos avançados (LLMs) para apoiar e otimizar a elaboração de laudos, relatórios técnicos e estudos de impacto ambiental. Engenharia de prompts e análise de conformidade jurídica.</p>
+              </div>
+            </div>
+          </div>
+          <!-- Item 4 -->
+          <div class="accordion-item">
+            <button class="accordion-toggle" aria-expanded="false" aria-controls="content-4">
+              <span class="module-number">04</span>
+              <span class="module-title">Internet das Coisas (IoT) e Redes de Sensores em Tempo Real</span>
+              <span class="accordion-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="accordion-content" id="content-4" aria-hidden="true">
+              <div class="accordion-body">
+                <p>Projetar redes de sensores e sistemas de telemetria para captação contínua de dados ambientais de qualidade do ar e da água em tempo real, integrando protocolos de comunicação modernos.</p>
+              </div>
+            </div>
+          </div>
+          <!-- Item 5 -->
+          <div class="accordion-item">
+            <button class="accordion-toggle" aria-expanded="false" aria-controls="content-5">
+              <span class="module-number">05</span>
+              <span class="module-title">IA e Visão Computacional na Análise Geoespacial</span>
+              <span class="accordion-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="accordion-content" id="content-5" aria-hidden="true">
+              <div class="accordion-body">
+                <p>Processar dados espaciais e imagens aéreas orbitais ou de satélite com algoritmos de Deep Learning. Identificação automática de desmatamento e classificação avançada de uso do solo.</p>
+              </div>
+            </div>
+          </div>
+          <!-- Item 6 -->
+          <div class="accordion-item">
+            <button class="accordion-toggle" aria-expanded="false" aria-controls="content-6">
+              <span class="module-number">06</span>
+              <span class="module-title">Conceitos gerais e principais abordagens de desenvolvimento do software</span>
+              <span class="accordion-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="accordion-content" id="content-6" aria-hidden="true">
+              <div class="accordion-body">
+                <p>Dominar os princípios da engenharia de software, ciclos de vida de sistemas, metodologias ágeis e tradicionais e arquitetura geral de documentação de software.</p>
+              </div>
+            </div>
+          </div>
+          <!-- Item 7 -->
+          <div class="accordion-item">
+            <button class="accordion-toggle" aria-expanded="false" aria-controls="content-7">
+              <span class="module-number">07</span>
+              <span class="module-title">Desenvolvimento de Sistemas com Agentes Autônomos</span>
+              <span class="accordion-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="accordion-content" id="content-7" aria-hidden="true">
+              <div class="accordion-body">
+                <p>Projetar e construir sistemas complexos baseados em múltiplos agentes de IA que tomam decisões, cooperam entre si e automatizam fluxos de trabalho usando frameworks modernos.</p>
+              </div>
+            </div>
+          </div>
+          <!-- Item 8 -->
+          <div class="accordion-item">
+            <button class="accordion-toggle" aria-expanded="false" aria-controls="content-8">
+              <span class="module-number">08</span>
+              <span class="module-title">Gêmeos Digitais de Ecossistemas (Digital Twins)</span>
+              <span class="accordion-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="accordion-content" id="content-8" aria-hidden="true">
+              <div class="accordion-body">
+                <p>Criar réplicas virtuais (Digital Twins) de bacias hidrográficas e áreas protegidas para simular impactos ecológicos e rodar cenários de testes antes de intervenções físicas reais.</p>
+              </div>
+            </div>
+          </div>
+          <!-- Item 9 -->
+          <div class="accordion-item">
+            <button class="accordion-toggle" aria-expanded="false" aria-controls="content-9">
+              <span class="module-number">09</span>
+              <span class="module-title">Ética, Privacidade e Segurança de Dados</span>
+              <span class="accordion-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="accordion-content" id="content-9" aria-hidden="true">
+              <div class="accordion-body">
+                <p>Implementar governança de dados ambientais em total conformidade com a LGPD. Detecção de anomalias com ferramentas Open Source e melhores práticas de segurança cibernética.</p>
+              </div>
+            </div>
+          </div>
+          <!-- Item 10 -->
+          <div class="accordion-item">
+            <button class="accordion-toggle" aria-expanded="false" aria-controls="content-10">
+              <span class="module-number">10</span>
+              <span class="module-title">Teste e Inspeção de Software: Técnicas e Automatização</span>
+              <span class="accordion-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="accordion-content" id="content-10" aria-hidden="true">
+              <div class="accordion-body">
+                <p>Aprender e aplicar técnicas de teste de código, testes de unidade e de integração automatizados para assegurar a estabilidade e estabilidade de sistemas baseados em Inteligência Artificial.</p>
+              </div>
+            </div>
+          </div>
+          <!-- Item 11 -->
+          <div class="accordion-item">
+            <button class="accordion-toggle" aria-expanded="false" aria-controls="content-11">
+              <span class="module-number">11</span>
+              <span class="module-title">Análise e modelagem de negócios (BABOK/Product Owner)</span>
+              <span class="accordion-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="accordion-content" id="content-11" aria-hidden="true">
+              <div class="accordion-body">
+                <p>Alinhar o desenvolvimento de soluções de software de IA aos objetivos de negócios e mercado. O papel do Product Owner e gerenciamento ágil de backlog de produtos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Validation & Legality Section -->
+    <section id="validacao" class="section-padding validation-section bg-light-layer">
+      <div class="container">
+        <div class="section-header text-center reveal">
+          <h2 class="section-title" style="color: var(--color-brand-dark);">Validação Legal e <span class="gradient-text">Chancela do MEC</span></h2>
+          <p class="section-desc" style="color: var(--color-brand-dark);">Sua especialização conta com todos os requisitos legais exigidos pelo Ministério da Educação com reconhecimento nacional.</p>
+        </div>
+
+        <div class="certificate-mockup-section reveal delay-1" style="margin-top: 40px;">
+          <div class="cert-card glassmorphism" style="grid-template-columns: 1.2fr 0.8fr; gap: 30px; border-color: rgba(0,0,0,0.1); background: #fff; color: var(--color-brand-dark);">
+            <div class="cert-text">
+              <div class="v-card-header" style="margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+                <i data-lucide="graduation-cap" class="v-icon" style="color: var(--color-primary); background: rgba(124, 191, 57, 0.1); border: 1px solid rgba(124, 191, 57, 0.25); border-radius: 12px 0 12px 0; padding: 10px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;"></i>
+                <h3 style="color: var(--color-brand-dark); font-size: 1.5rem; font-weight: 700;">Diploma de Especialista Reconhecido pelo MEC</h3>
+              </div>
+              <p style="color: rgba(0,0,0,0.7); margin-bottom: 12px;">Ao concluir a Pós-Graduação, você receberá o diploma oficial de Especialista (Lato Sensu) emitido em parceria com a Faculdade Anhanguera, instituição de prestígio nacional avaliada com Nota Máxima (Nota 5) no MEC.</p>
+              <p style="color: rgba(0,0,0,0.7); margin-bottom: 20px;">O certificado conta com código de validação nacional e registro formal, garantindo o peso que o seu currículo precisa para se destacar no mercado corporativo e em consultorias.</p>
+              
+              <div class="e-mec-box" style="margin-top: 20px; background: rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.1); padding: 16px; border-radius: 8px;">
+                <span class="e-mec-tag" style="background: rgba(22, 140, 64, 0.1); color: var(--color-secondary); font-weight: 700; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; display: inline-block; margin-bottom: 8px;">Instituição Nota 5 no MEC</span>
+                <p style="font-size: 0.95rem; margin-bottom: 0; color: rgba(0,0,0,0.7);">Você pode consultar a regularidade da nossa instituição chanceladora diretamente no portal oficial do e-MEC.</p>
+              </div>
+            </div>
+            
+            <div class="crea-image-container" style="display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 24px; background: rgba(0, 0, 0, 0.02); padding: 24px; border-radius: 12px;">
+              <img src="/logo-anhanguera.webp" alt="Logo Faculdade Anhanguera" style="max-height: 60px; width: auto; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));">
+              <img src="/mec-badge.webp" alt="Selo MEC Nota 5" style="max-height: 100px; width: auto;">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mentors Section -->
+    <section id="mentores" class="section-padding mentors-section bg-dark-layer">
+      <div class="container">
+        <div class="section-header text-center reveal">
+          <h2 class="section-title">Aprenda com quem é <span class="gradient-text">Referência no Mercado</span></h2>
+          <p class="section-desc">Nossos mentores são engenheiros, cientistas de dados, desenvolvedores e especialistas que atuam construindo soluções reais de IA.</p>
+        </div>
+
+        <div class="mentors-carousel-wrapper reveal delay-1">
+          <div class="carousel-track-container" id="mentors-track">
+            <!-- Slide 1 -->
+            <div class="mentor-slide">
+              <div class="mentor-card glassmorphism">
+                <div class="mentor-photo-wrapper">
+                  <img src="/faculty/henrique.webp" alt="Henrique Gonzalez" class="mentor-photo">
+                </div>
+                <h3>Henrique Gonzalez</h3>
+                <span class="mentor-role">Co-Fundador Ambiental Pro</span>
+                <p>Engenheiro Ambiental (UFRJ). Atua com geotecnologias, inteligência artificial, análise espacial de dados ambientais e gestão de áreas contaminadas.</p>
+              </div>
+            </div>
+            <!-- Slide 2 -->
+            <div class="mentor-slide">
+              <div class="mentor-card glassmorphism">
+                <div class="mentor-photo-wrapper">
+                  <img src="/faculty/hermann.webp" alt="Hermann Fernandes" class="mentor-photo">
+                </div>
+                <h3>Hermann Fernandes</h3>
+                <span class="mentor-role">Cientista de Dados</span>
+                <p>Engenheiro Ambiental (UFRJ) e especialista em Ciência de Dados. Atua com gestão de casos ambientais complexos, análise de dados e inovação aplicada.</p>
+              </div>
+            </div>
+            <!-- Slide 3 -->
+            <div class="mentor-slide">
+              <div class="mentor-card glassmorphism">
+                <div class="mentor-photo-wrapper">
+                  <img src="/faculty/victor.webp" alt="Victor Valente Silvestre" class="mentor-photo">
+                </div>
+                <h3>Victor V. Silvestre</h3>
+                <span class="mentor-role">Mentor de IA Generativa</span>
+                <p>Engenheiro Sanitarista e Ambiental, mestre e pesquisador. Especialista em licenciamento ambiental e IA generativa. Criador do Método Estudo Ambiental Eficiente com IA.</p>
+              </div>
+            </div>
+            <!-- Slide 4 -->
+            <div class="mentor-slide">
+              <div class="mentor-card glassmorphism">
+                <div class="mentor-photo-wrapper">
+                  <img src="/faculty/vinicius.webp" alt="Vinícius Ragghianti" class="mentor-photo">
+                </div>
+                <h3>Vinícius Ragghianti</h3>
+                <span class="mentor-role">Mentor de Automação & Projetos</span>
+                <p>Engenheiro Ambiental and Sanitarista, advogado, MBA em Projetos. Especialista em saneamento, infraestrutura e IA generativa aplicada à engenharia. Criador do Método RGT.</p>
+              </div>
+            </div>
+            <!-- Slide 5 -->
+            <div class="mentor-slide">
+              <div class="mentor-card glassmorphism">
+                <div class="mentor-photo-wrapper">
+                  <img src="/faculty/ariel.webp" alt="Ariel Dias" class="mentor-photo">
+                </div>
+                <h3>Ariel Dias</h3>
+                <span class="mentor-role">Mentor de Computação</span>
+                <p>Mestre em Ciência da Computação e Autor. Especialista em Inteligência Artificial, Ciência de Dados e tecnologias voltadas à Indústria 4.0.</p>
+              </div>
+            </div>
+            <!-- Slide 6 -->
+            <div class="mentor-slide">
+              <div class="mentor-card glassmorphism">
+                <div class="mentor-photo-wrapper">
+                  <img src="/faculty/luis.webp" alt="Luís Otávio Perin" class="mentor-photo">
+                </div>
+                <h3>Luís Otávio Perin</h3>
+                <span class="mentor-role">Mentor de Arquitetura de Software</span>
+                <p>Especialista em Desenvolvimento de Software. Atua nas áreas de arquitetura de sistemas distribuídos, redes de sensores e computação distribuída.</p>
+              </div>
+            </div>
+            <!-- Slide 7 -->
+            <div class="mentor-slide">
+              <div class="mentor-card glassmorphism">
+                <div class="mentor-photo-wrapper">
+                  <img src="/faculty/danilo.webp" alt="Danilo Moreira Soares" class="mentor-photo">
+                </div>
+                <h3>Danilo Moreira Soares</h3>
+                <span class="mentor-role">Mentor de Processos & Dados</span>
+                <p>Mestre em Administração e coordenador de TI. Especialista em ciência de dados, automação, IA generativa e otimização de processos.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="carousel-nav">
+            <button class="carousel-btn prev-btn" id="mentors-prev" aria-label="Mentor Anterior">
+              <i data-lucide="chevron-left"></i>
+            </button>
+            <div class="carousel-dots" id="mentors-dots"></div>
+            <button class="carousel-btn next-btn" id="mentors-next" aria-label="Próximo Mentor">
+              <i data-lucide="chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Student Testimonials Section -->
+    <section id="depoimentos" class="section-padding testimonials-section bg-light-layer">
+      <div class="container">
+        <div class="section-header text-center reveal">
+          <h2 class="section-title" style="color: var(--color-brand-dark);">O que dizem os nossos <span class="gradient-text">Alunos Pro</span></h2>
+          <p class="section-desc" style="color: var(--color-brand-dark);">Profissionais que integraram tecnologia aos seus fluxos e transformaram suas carreiras aplicando o método da Ambiental Pro.</p>
+        </div>
+
+        <div class="testimonials-carousel-wrapper reveal delay-1">
+          <div class="carousel-track-container" id="testimonials-track">
+            <!-- Testimonial 1 -->
+            <div class="testimonial-slide">
+              <div class="testimonial-card glassmorphism" style="background: #fff; border-color: rgba(0,0,0,0.1); color: var(--color-brand-dark);">
+                <div class="t-profile">
+                  <img src="https://www.lp.ambientalpro.com.br/wp-content/uploads/2025/09/28-1024x1024.png" alt="Luan D Olivêira" class="t-photo">
+                  <div>
+                    <h4 style="color: var(--color-brand-dark);">Luan D Olivêira</h4>
+                    <span class="t-title" style="color: var(--color-secondary);">Engenheiro Agrícola</span>
+                  </div>
+                </div>
+                <p class="t-quote" style="color: rgba(0,0,0,0.7);">
+                  "Excelente programa da Ambiental Pro! A qualidade dos professores, disciplinas aplicadas em automação de relatórios e a comunidade de networking são fantásticas. Mudou minha visão operacional de engenharia."
+                </p>
+              </div>
+            </div>
+
+            <!-- Testimonial 2 -->
+            <div class="testimonial-slide">
+              <div class="testimonial-card glassmorphism" style="background: #fff; border-color: rgba(0,0,0,0.1); color: var(--color-brand-dark);">
+                <div class="t-profile">
+                  <img src="https://www.lp.ambientalpro.com.br/wp-content/uploads/2025/09/MBA-Depoimentos-Participantes-20-1024x1024.png" alt="Robson Matos" class="t-photo">
+                  <div>
+                    <h4 style="color: var(--color-brand-dark);">Robson Matos</h4>
+                    <span class="t-title" style="color: var(--color-secondary);">Engenheiro Químico • Defesa Civil AM</span>
+                  </div>
+                </div>
+                <p class="t-quote" style="color: rgba(0,0,0,0.7);">
+                  "Decidi encarar o desafio do processamento inteligente de dados com a Ambiental Pro e está fazendo muita diferença no meu trabalho de mapeamento preventivo de riscos no estado do Amazonas."
+                </p>
+              </div>
+            </div>
+
+            <!-- Testimonial 3 -->
+            <div class="testimonial-slide">
+              <div class="testimonial-card glassmorphism" style="background: #fff; border-color: rgba(0,0,0,0.1); color: var(--color-brand-dark);">
+                <div class="t-profile">
+                  <img src="https://www.lp.ambientalpro.com.br/wp-content/uploads/2025/09/30-1024x1024.png" alt="Lucas Guerra" class="t-photo">
+                  <div>
+                    <h4 style="color: var(--color-brand-dark);">Lucas Guerra</h4>
+                    <span class="t-title" style="color: var(--color-secondary);">Engenheiro Ambiental</span>
+                  </div>
+                </div>
+                <p class="t-quote" style="color: rgba(0,0,0,0.7);">
+                  "Essa formação consolida minha atuação na área de análise espacial e estruturação de dados. Conseguir automatizar fluxos de tomada de decisão com IA é o grande diferencial profissional de hoje."
+                </p>
+              </div>
+            </div>
+
+            <!-- Testimonial 4 -->
+            <div class="testimonial-slide">
+              <div class="testimonial-card glassmorphism" style="background: #fff; border-color: rgba(0,0,0,0.1); color: var(--color-brand-dark);">
+                <div class="t-profile">
+                  <img src="https://www.lp.ambientalpro.com.br/wp-content/uploads/2025/09/MBA-Depoimentos-Participantes-21-1024x1024.png" alt="Bruno Carvalho" class="t-photo">
+                  <div>
+                    <h4 style="color: var(--color-brand-dark);">Bruno Carvalho</h4>
+                    <span class="t-title" style="color: var(--color-secondary);">Engenheiro Florestal</span>
+                  </div>
+                </div>
+                <p class="t-quote" style="color: rgba(0,0,0,0.7);">
+                  "Ampliou muito minha capacidade de lidar com dados de imagens orbitais e sensores contínuos em campo. Excelente didática dos mentores e suporte sempre presente."
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="carousel-nav">
+            <button class="carousel-btn prev-btn" id="testimonials-prev" aria-label="Depoimento Anterior">
+              <i data-lucide="chevron-left"></i>
+            </button>
+            <div class="carousel-dots" id="testimonials-dots"></div>
+            <button class="carousel-btn next-btn" id="testimonials-next" aria-label="Próximo Depoimento">
+              <i data-lucide="chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="section-padding faq-section bg-dark-layer">
+      <div class="container max-w-lg">
+        <div class="section-header text-center reveal">
+          <h2 class="section-title">Perguntas <span class="gradient-text">Frequentes</span></h2>
+          <p class="section-desc">Confira as principais dúvidas sobre a Pós-Graduação IA.MA.</p>
+        </div>
+
+        <div class="faq-accordion-list reveal delay-1">
+          <!-- FAQ 1 -->
+          <div class="faq-item">
+            <button class="faq-toggle" aria-expanded="false" aria-controls="faq-1">
+              <span>Preciso saber programar para ingressar no curso?</span>
+              <span class="faq-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="faq-content" id="faq-1" aria-hidden="true">
+              <div class="faq-body">
+                <p>Não. A pós foi estruturada para quem está começando do zero. Você aprenderá os fundamentos de lógica e, principalmente, como usar assistentes e agentes de Inteligência Artificial modernos para acelerar e guiar a codificação das suas ferramentas.</p>
+              </div>
+            </div>
+          </div>
+          <!-- FAQ 2 -->
+          <div class="faq-item">
+            <button class="faq-toggle" aria-expanded="false" aria-controls="faq-2">
+              <span>O que é o entregável de conclusão de curso?</span>
+              <span class="faq-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="faq-content" id="faq-2" aria-hidden="true">
+              <div class="faq-body">
+                <p>Diga adeus ao TCC acadêmico comum. O nosso modelo foca em portfólio. Ao final da pós, o seu projeto de conclusão será um portfólio de sistemas funcionais (leitores de PDFs, mapas inteligentes, dashboards de telemetria) rodando em produção.</p>
+              </div>
+            </div>
+          </div>
+          <!-- FAQ 3 -->
+          <div class="faq-item">
+            <button class="faq-toggle" aria-expanded="false" aria-controls="faq-3">
+              <span>Como funcionam as aulas e a prática?</span>
+              <span class="faq-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="faq-content" id="faq-3" aria-hidden="true">
+              <div class="faq-body">
+                <p>O curso é 100% online (EAD). As aulas ficam gravadas e acessíveis na nossa plataforma 24 horas por dia, 7 dias por semana. Você pode assistir e praticar no seu próprio ritmo, conciliando com sua rotina de trabalho.</p>
+              </div>
+            </div>
+          </div>
+          <!-- FAQ 4 -->
+          <div class="faq-item">
+            <button class="faq-toggle" aria-expanded="false" aria-controls="faq-4">
+              <span>Quais tecnologias eu vou dominar?</span>
+              <span class="faq-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="faq-content" id="faq-4" aria-hidden="true">
+              <div class="faq-body">
+                <p>Você aprenderá a integrar bancos de dados não estruturados com modelos de linguagem (RAG), processamento de imagens orbitais via visão computacional, telemetria contínua com sensores IoT e a publicação de dashboards dinâmicos integrados com IAs.</p>
+              </div>
+            </div>
+          </div>
+          <!-- FAQ 5 -->
+          <div class="faq-item">
+            <button class="faq-toggle" aria-expanded="false" aria-controls="faq-5">
+              <span>O diploma é reconhecido pelo MEC?</span>
+              <span class="faq-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="faq-content" id="faq-5" aria-hidden="true">
+              <div class="faq-body">
+                <p>Sim. A nossa pós-graduação é chancelada pela Anhanguera, uma instituição de ensino reconhecida com nota máxima (Nota 5) pelo MEC. O diploma emitido é de Especialização (Lato Sensu) e tem validade em todo o território nacional.</p>
+              </div>
+            </div>
+          </div>
+          <!-- FAQ 6 -->
+          <div class="faq-item">
+            <button class="faq-toggle" aria-expanded="false" aria-controls="faq-6">
+              <span>Como funciona o suporte para tirar dúvidas de código ou projetos?</span>
+              <span class="faq-icon"><i data-lucide="chevron-down"></i></span>
+            </button>
+            <div class="faq-content" id="faq-6" aria-hidden="true">
+              <div class="faq-body">
+                <p>Você terá suporte direto e ativo através dos nossos canais de atendimento e da comunidade exclusiva de alunos para sanar qualquer dúvida técnica nas atividades e ferramentas propostas.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-container">
+      <div class="footer-brand">
+        <div class="logo-wrapper">
+          <a href="#hero">
+            <img src="/logo.webp" alt="Logo Pós IA.MA" class="site-logo-full">
+          </a>
+        </div>
+        <p>Capacitando e qualificando profissionais com foco na construção de sistemas práticos e de alto nível de Inteligência Artificial aplicada ao setor ambiental.</p>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Ambiental Pro. Todos os direitos reservados. CNPJ: 36.701.725/0001-54</p>
+        <div class="footer-links">
+          <a href="#">Políticas de Privacidade</a>
+          <a href="#">Termos de Uso</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox Modal -->
+  <div id="image-lightbox" class="lightbox">
+    <span class="lightbox-close">&times;</span>
+    <img class="lightbox-content" id="lightbox-img" src="" alt="Imagem Ampliada">
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="/iama-script.js"></script>
+</body>
+</html>
