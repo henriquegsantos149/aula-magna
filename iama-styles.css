@@ -1209,8 +1209,8 @@ a {
 }
 
 .mentor-photo-wrapper {
-  width: 100px;
-  height: 100px;
+  width: 140px;
+  height: 140px;
   border-radius: 22px 0 22px 0; /* Cantos de assinatura em vez de círculo */
   padding: 3px;
   background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
