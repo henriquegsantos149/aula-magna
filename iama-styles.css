@@ -1210,6 +1210,7 @@ a {
 
 .mentor-photo-wrapper {
   width: 140px;
+  max-width: 100%;
   height: 140px;
   border-radius: 22px 0 22px 0; /* Cantos de assinatura em vez de círculo */
   padding: 3px;

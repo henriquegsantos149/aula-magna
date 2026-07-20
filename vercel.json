@@ -13,6 +13,12 @@
     },
     {
       "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "aulamagna.ambientalpro.com.br"
+        }
+      ],
       "destination": "https://www.ambientalpro.com.br",
       "permanent": false
     }
