@@ -10,6 +10,11 @@
       "source": "/pagina-de-matricula.html",
       "destination": "https://ambientalpro.com.br",
       "permanent": true
+    },
+    {
+      "source": "/",
+      "destination": "https://www.ambientalpro.com.br",
+      "permanent": false
     }
   ]
 }
