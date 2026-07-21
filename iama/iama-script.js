@@ -486,7 +486,6 @@ function initFormControls() {
     .then(async response => {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'Erro na inscrição');
-      
       form.classList.add('hidden');
       
       const securityInfo = document.getElementById('security-info');
@@ -497,6 +496,10 @@ function initFormControls() {
       const successMessage = document.getElementById('form-success-message');
       if (successMessage) {
         successMessage.classList.remove('hidden');
+        const groupBtn = successMessage.querySelector('a');
+        if (groupBtn) {
+          groupBtn.href = 'https://tally.so/r/D4EXMN' + window.location.search;
+        }
       }
     })
     .catch(error => {
