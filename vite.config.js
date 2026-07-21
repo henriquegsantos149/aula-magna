@@ -9,9 +9,9 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'index.html'),
-        matricula: resolve(__dirname, 'pagina-de-matricula.html'),
-        iama: resolve(__dirname, 'iama.html')
+        main: resolve(__dirname, 'ggsr/index.html'),
+        matricula: resolve(__dirname, 'ggsr/pagina-de-matricula.html'),
+        iama: resolve(__dirname, 'iama/iama.html')
       }
     }
   }

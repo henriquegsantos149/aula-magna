@@ -30,6 +30,7 @@ export default async function handler(req, res) {
 
     // Extrair os dados recebidos do front-end
     const {
+      origin = 'ggsr',
       name = '',
       email = '',
       whatsapp = '',
@@ -46,20 +47,41 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'O email é obrigatório.' });
     }
 
-    // Obter a data atual no formato DD/MM/YYYY
+    // Obter a data atual
     const currentDate = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    const currentDateISO = new Date().toISOString();
 
-    // Montar os campos personalizados filtrando valores vazios (evitar enviar string vazia se não precisar)
-    const fieldValues = [
-      { field: "772", value: utm_term },
-      { field: "773", value: currentDate },
-      { field: "774", value: graduation },
-      { field: "775", value: education_area },
-      { field: "776", value: utm_campaign },
-      { field: "777", value: utm_source },
-      { field: "778", value: utm_medium },
-      { field: "779", value: utm_content }
-    ].filter(f => f.value && f.value !== "");
+    let fieldValues = [];
+    let tagId = "";
+
+    // Configuração baseada na origem da requisição
+    if (origin === 'iama') {
+      fieldValues = [
+        { field: "844", value: utm_term },
+        { field: "847", value: currentDateISO },
+        { field: "845", value: graduation },
+        { field: "846", value: education_area },
+        { field: "840", value: utm_campaign },
+        { field: "841", value: utm_source },
+        { field: "842", value: utm_medium },
+        { field: "843", value: utm_content }
+      ].filter(f => f.value && f.value !== "");
+      
+      tagId = "470"; // [L02][PÓS][IA.MA] Lead
+    } else {
+      fieldValues = [
+        { field: "772", value: utm_term },
+        { field: "773", value: currentDate },
+        { field: "774", value: graduation },
+        { field: "775", value: education_area },
+        { field: "776", value: utm_campaign },
+        { field: "777", value: utm_source },
+        { field: "778", value: utm_medium },
+        { field: "779", value: utm_content }
+      ].filter(f => f.value && f.value !== "");
+      
+      tagId = "453"; // [L18][PÓS][GGSR] Lead
+    }
 
     const contactPayload = {
       contact: {
@@ -89,11 +111,11 @@ export default async function handler(req, res) {
     const syncResult = await syncResponse.json();
     const contactId = syncResult.contact.id;
 
-    // Passo 2: Adicionar a Tag (ID 453 - [L18][PÓS][GGSR] Lead)
+    // Passo 2: Adicionar a Tag
     const tagPayload = {
       contactTag: {
         contact: contactId,
-        tag: "453"
+        tag: tagId
       }
     };
 

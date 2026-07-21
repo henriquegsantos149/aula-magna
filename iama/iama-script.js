@@ -446,8 +446,47 @@ function initFormControls() {
     submitBtn.innerHTML = '<i data-lucide="loader" class="animate-spin"></i> Registrando sua vaga...';
     if (typeof lucide !== 'undefined') lucide.createIcons();
 
-    // Simular o registro e exibir a mensagem de sucesso amigável
-    setTimeout(() => {
+    // Obter parâmetros UTM da URL (Case-insensitive)
+    const urlParams = new URLSearchParams(window.location.search);
+    const lowerParams = {};
+    for (const [key, value] of urlParams.entries()) {
+      lowerParams[key.toLowerCase()] = value;
+    }
+    const getParam = (keys) => {
+      for (const key of keys) {
+        if (lowerParams[key.toLowerCase()] !== undefined) {
+          return lowerParams[key.toLowerCase()];
+        }
+      }
+      return '';
+    };
+
+    const payload = {
+      origin: 'iama',
+      name: document.getElementById('user-name')?.value || '',
+      email: document.getElementById('user-email')?.value || '',
+      whatsapp: phoneInput.value,
+      graduation: gradSelect.value,
+      education_area: areaInput ? areaInput.value : '',
+      utm_source: getParam(['utm_source', 'src', 'l02psiama_utm_source']),
+      utm_medium: getParam(['utm_medium', 'l02psiama_utm_medium']),
+      utm_campaign: getParam(['utm_campaign', 'l02psiama_utm_campaign']),
+      utm_content: getParam(['utm_content', 'l02psiama_utm_content']),
+      utm_term: getParam(['utm_term', 'l02psiama_utm_term'])
+    };
+
+    // Enviar para a API serverless
+    fetch('/api/subscribe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(async response => {
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Erro na inscrição');
+      
       form.classList.add('hidden');
       
       const securityInfo = document.getElementById('security-info');
@@ -459,7 +498,14 @@ function initFormControls() {
       if (successMessage) {
         successMessage.classList.remove('hidden');
       }
-    }, 800);
+    })
+    .catch(error => {
+      console.error('Erro ao enviar formulário:', error);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Garantir Vaga <i data-lucide="arrow-right"></i>';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+      alert('Ocorreu um erro ao processar sua inscrição. Por favor, tente novamente.');
+    });
   });
 }
 
