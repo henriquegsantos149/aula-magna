@@ -2185,3 +2185,28 @@ a {
     font-size: 1.6rem !important;
   }
 }
+
+/* ====== Aggressive Mobile Resets ====== */
+@media (max-width: 768px) {
+  .group-vip-section > .container > div[style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+  
+  [style*="minmax(320px, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+  
+  #validacao > .container > div:last-child > div[style*="gap: 40px"] {
+    gap: 16px !important;
+    flex-direction: column !important;
+  }
+  
+  .details-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+@media (max-width: 480px) {
+  * {
+    min-width: 0 !important;
+  }
+}
