@@ -294,8 +294,12 @@ function initCarousels() {
     buildDots();
     updateSlider(false);
 
+    let lastWidth = window.innerWidth;
     window.addEventListener('resize', () => {
-      updateSlider(false);
+      if (window.innerWidth !== lastWidth) {
+        lastWidth = window.innerWidth;
+        updateSlider(false);
+      }
     });
   }
 }
