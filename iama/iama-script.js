@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCarousels();
   initLightbox();
   initFormControls();
+  initCountdown();
 });
 
 // 1. Sticky Header
@@ -536,10 +537,56 @@ function initSmoothScroll() {
             behavior: 'smooth',
             block: 'start'
           });
+          
+          if (targetId === '#inscricao' || targetId === '#hero') {
+            const nameInput = document.getElementById('user-name');
+            if (nameInput) {
+              setTimeout(() => {
+                nameInput.focus();
+              }, 800);
+            }
+          }
         }
       } catch (err) {
         console.warn('Invalid selector for smooth scroll:', targetId);
       }
     });
   });
+}
+
+// 9. Countdown Timer
+function initCountdown() {
+  const targetDate = new Date('2026-08-05T20:00:00-03:00').getTime();
+  const daysEl = document.getElementById('cd-days');
+  const hoursEl = document.getElementById('cd-hours');
+  const minsEl = document.getElementById('cd-minutes');
+  const secsEl = document.getElementById('cd-seconds');
+
+  if (!daysEl || !hoursEl || !minsEl || !secsEl) return;
+
+  function update() {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    if (distance < 0) {
+      daysEl.innerText = "00";
+      hoursEl.innerText = "00";
+      minsEl.innerText = "00";
+      secsEl.innerText = "00";
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    daysEl.innerText = String(days).padStart(2, '0');
+    hoursEl.innerText = String(hours).padStart(2, '0');
+    minsEl.innerText = String(minutes).padStart(2, '0');
+    secsEl.innerText = String(seconds).padStart(2, '0');
+  }
+
+  update();
+  setInterval(update, 1000);
 }
