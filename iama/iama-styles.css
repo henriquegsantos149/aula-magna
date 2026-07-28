@@ -591,7 +591,7 @@ a {
   display: flex;
   gap: 12px;
   margin-bottom: 40px;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 
 .h-item {
@@ -2169,12 +2169,14 @@ a {
 
 @media (max-width: 480px) {
   .social-proof-text {
-    font-size: 0.65rem !important;
-    white-space: nowrap !important;
+    font-size: 0.85rem !important;
+    white-space: normal !important;
+    text-align: center;
   }
   .hero-social-proof {
-    gap: 8px !important;
-    flex-wrap: nowrap !important;
+    gap: 12px !important;
+    flex-wrap: wrap !important;
+    justify-content: center;
   }
   .avatar-placeholder {
     width: 36px !important;
