@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLightbox();
   initFormControls();
   initCountdown();
+  initStickyCTA();
 });
 
 // 1. Sticky Header
@@ -30,6 +31,33 @@ function initHeader() {
 
   window.addEventListener('scroll', handleScroll);
   handleScroll(); // Check once on load
+}
+
+// Sticky CTA
+function initStickyCTA() {
+  const stickyCta = document.getElementById('sticky-cta-container');
+  const heroSection = document.getElementById('hero');
+  
+  if (!stickyCta || !heroSection) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      // If hero is intersecting (visible), hide the CTA. Otherwise, show it.
+      if (entry.isIntersecting) {
+        stickyCta.classList.remove('show');
+      } else {
+        // Only show if we scrolled down past the hero (top < 0)
+        if (entry.boundingClientRect.top < 0) {
+          stickyCta.classList.add('show');
+        }
+      }
+    });
+  }, {
+    threshold: 0,
+    rootMargin: "-100px 0px 0px 0px" // give a little margin before it appears
+  });
+
+  observer.observe(heroSection);
 }
 
 // 2. Mobile Menu Toggle
