@@ -409,49 +409,33 @@ function initFormControls() {
     }
   });
 
-  // Detailed Phone validation function
-  const validatePhone = (value) => {
-    const cleanValue = value.replace(/\D/g, '');
-    
-    if (cleanValue.length === 0) {
+  // Initialize intl-tel-input
+  const iti = window.intlTelInput(phoneInput, {
+    initialCountry: "br",
+    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/js/utils.js",
+  });
+
+  // Phone validation function
+  const validatePhone = () => {
+    if (phoneInput.value.trim() === '') {
       return { isValid: true, message: '' }; // Required attribute handles empty field
     }
-    
-    if (cleanValue.length !== 11) {
-      return { isValid: false, message: 'O WhatsApp deve ter exatamente 11 dígitos (DDD + 9 + número).' };
+    if (iti.isValidNumber()) {
+      return { isValid: true, message: '' };
     }
-    
-    const ddd = cleanValue.substring(0, 2);
-    const ninthDigit = cleanValue.charAt(2);
-    
-    // DDDs in Brazil are 11-99, second digit cannot be 0
-    const dddRegex = /^[1-9][1-9]$/;
-    if (!dddRegex.test(ddd)) {
-      return { isValid: false, message: 'O DDD informado é inválido.' };
-    }
-    
-    if (ninthDigit !== '9') {
-      return { isValid: false, message: 'O número de celular deve começar com o dígito 9 (Ex: DD9XXXXXXXX).' };
-    }
-    
-    return { isValid: true, message: '' };
+    return { isValid: false, message: 'Número de telefone inválido para o país selecionado.' };
   };
 
-  // Strict Phone formatting and digits restriction (Exactly 11 digits)
+  // Clean input
   phoneInput.addEventListener('input', (e) => {
-    let value = e.target.value.replace(/\D/g, ''); // Strip non-numeric
-    if (value.length > 11) {
-      value = value.slice(0, 11);
-    }
+    let value = e.target.value.replace(/[^\d+\s-]/g, ''); 
     e.target.value = value;
-    // Clear validation error while typing to allow correction
     phoneInput.setCustomValidity('');
   });
 
   // Validate on blur (quietly, without reporting)
   phoneInput.addEventListener('blur', () => {
-    const value = phoneInput.value;
-    const validation = validatePhone(value);
+    const validation = validatePhone();
     if (!validation.isValid) {
       phoneInput.setCustomValidity(validation.message);
     } else {
@@ -461,7 +445,7 @@ function initFormControls() {
 
   // Form Submission
   form.addEventListener('submit', (e) => {
-    const validation = validatePhone(phoneInput.value);
+    const validation = validatePhone();
     if (!validation.isValid) {
       e.preventDefault(); // Block submit
       phoneInput.setCustomValidity(validation.message);
@@ -498,7 +482,7 @@ function initFormControls() {
       origin: 'iama',
       name: document.getElementById('user-name')?.value || '',
       email: document.getElementById('user-email')?.value || '',
-      whatsapp: phoneInput.value,
+      whatsapp: iti.getNumber(),
       graduation: gradSelect.value,
       education_area: areaInput ? areaInput.value : '',
       utm_source: getParam(['utm_source', 'src', 'l02psiama_utm_source']),

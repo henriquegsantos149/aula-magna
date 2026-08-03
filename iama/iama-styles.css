@@ -712,6 +712,14 @@ a {
   position: relative;
 }
 
+.iti {
+  width: 100%;
+}
+
+.iti__country-list {
+  color: #000;
+}
+
 .registration-form input,
 .registration-form select {
   width: 100%;
