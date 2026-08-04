@@ -2494,8 +2494,6 @@ a {
   .hero-highlights .h-item:nth-child(3) { order: 2; }
   .hero-highlights .h-item:nth-child(2) { 
     order: 3; 
-    flex-basis: 100%; 
-    justify-content: center;
     margin-top: 4px;
   }
 }
