@@ -426,9 +426,10 @@ a {
     justify-content: flex-start;
   }
 
-  .header-container::after {
-    content: "";
+  .header-cta {
     flex: 1;
+    display: flex;
+    justify-content: flex-end;
   }
 }
 
