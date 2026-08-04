@@ -11,7 +11,8 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'ggsr/index.html'),
         matricula: resolve(__dirname, 'ggsr/pagina-de-matricula.html'),
-        iama: resolve(__dirname, 'iama/index.html')
+        iama: resolve(__dirname, 'iama/index.html'),
+        iama_matricula: resolve(__dirname, 'iama/pagina-de-matricula.html')
       }
     }
   }
