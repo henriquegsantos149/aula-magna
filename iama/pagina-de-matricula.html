@@ -160,8 +160,46 @@
       </div>
     </section>
 
+    <!-- Bonus Section -->
+    <section id="bonus" class="bonus-section bg-light-layer section-padding" style="text-align: center;">
+      <div class="container reveal">
+        <h2 class="section-title" style="margin-bottom: 10px; color: #111;">Para quem comprar até <br>
+          <span class="gradient-text" style="font-size: 1.2em; font-weight: 800; text-transform: none;">23h59 de hoje...</span>
+        </h2>
+        
+        <div style="max-width: 800px; margin: 60px auto 0; text-align: center;">
+          <!-- CSS Card for Passaporte Ouro -->
+          <div style="width: 100%; max-width: 360px; height: 220px; background: linear-gradient(135deg, #d4af37, #aa771c, #d4af37); border-radius: 12px; margin: 0 auto 40px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 40px rgba(212, 175, 55, 0.15); border: 2px solid #f3e5ab; position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to right, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%); transform: skewX(-20deg); animation: shine 4s infinite;"></div>
+            <div style="text-align: center; color: #fff; font-family: 'Times New Roman', serif; z-index: 2;">
+              <div style="font-size: 14px; letter-spacing: 2px; margin-bottom: 12px; color: #f9f1d8; text-transform: uppercase;">Ambiental Pro</div>
+              <div style="font-size: 22px; font-weight: bold; letter-spacing: 1px; color: #fff; text-transform: uppercase; margin-bottom: 15px;">Passaporte Gold 2026</div>
+              <div style="font-size: 10px; opacity: 0.8; letter-spacing: 3px; border-top: 1px solid rgba(255,255,255,0.3); padding-top: 15px; width: 60%; margin: 0 auto;">PASSPORT</div>
+            </div>
+          </div>
+
+          <h3 style="font-size: 32px; font-weight: 700; color: #111; margin-bottom: 20px;">Passaporte Ouro 2026:</h3>
+          <p style="font-size: 24px; color: var(--color-primary); font-weight: 600; line-height: 1.4; margin-bottom: 30px;">
+            Acesso gratuito a todos os congressos<br>
+            <span style="text-decoration: underline; text-underline-offset: 6px;">online</span> da Ambiental Pro em 2026*
+          </p>
+          <p style="font-size: 14px; color: #555;">
+            *Incluindo as gravações dos que já aconteceram.
+          </p>
+        </div>
+      </div>
+      <style>
+        @keyframes shine {
+          0% { left: -100%; }
+          20% { left: 100%; }
+          100% { left: 100%; }
+        }
+      </style>
+    </section>
+
+
     <!-- Details Section -->
-    <section id="detalhes" class="section-padding details-section bg-light-layer">
+    <section id="detalhes" class="section-padding details-section bg-dark-layer">
       <div class="container">
         <div class="section-header text-center reveal">
           <h2 class="section-title">O que você precisa saber sobre a <br><span class="gradient-text">Pós-Graduação IA.MA</span></h2>
@@ -764,6 +802,7 @@
       const stickyCdSeconds = document.getElementById('sticky-cd-seconds');
       const stickyCdText = document.getElementById('sticky-countdown-text');
       const heroSection = document.getElementById('hero');
+      const bonusSection = document.getElementById('bonus');
 
       // The sticky banner is now always visible when active, no scroll listener needed.
 
@@ -783,16 +822,17 @@
         let targetDate = null;
         let text = "";
 
-        if (now < start23) {
-          targetDate = null;
-        } else if (now < end23) {
+        if (now >= start23 && now < end23) {
           targetDate = end23;
-          text = "Fim da oferta em:";
-        } else if (now < start26) {
-          targetDate = null;
-        } else if (now < end26) {
-          targetDate = end26;
-          text = "Fim da oferta em:";
+          text = "Fim da oferta com o bônus em:";
+        }
+
+        if (bonusSection) {
+          if (now > end23) {
+            bonusSection.style.display = 'none';
+          } else {
+            bonusSection.style.display = '';
+          }
         }
 
         if (targetDate) {
