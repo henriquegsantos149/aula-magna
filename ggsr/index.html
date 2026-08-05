@@ -56,6 +56,9 @@
   <!-- Stylesheet -->
   <link rel="stylesheet" href="./styles.css">
   
+  <!-- intl-tel-input CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/css/intlTelInput.css" />
+  
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -113,7 +116,7 @@
         <div class="hero-content reveal">
           <div class="badge">
             <span class="badge-dot"></span>
-            <span class="badge-text">Aula Magna Gratuita • 23/06 às 20h</span>
+            <span class="badge-text">Aula Magna Gratuita • 26/08 às 20h</span>
           </div>
           <h1 class="hero-title">
             Aula Magna da Pós-Graduação em <span class="gradient-text">GGSR</span>
@@ -190,70 +193,149 @@
       </div>
     </section>
 
-    <!-- Group VIP Section -->
-    <section class="section-padding group-vip-section bg-light-layer">
-      <div class="container max-w-lg text-center reveal">
-        <div class="vip-card-box glassmorphism">
-          <div class="card-glow-top"></div>
-          <div class="vip-icon-wrapper">
-            <i data-lucide="users"></i>
+    <!-- Sobre a Aula Section -->
+    <section id="sobre-aula" class="section-padding about-class-section bg-light-layer">
+      <div class="container">
+        <div class="section-header text-center reveal">
+          <h2 class="section-title" style="color: #000d14;">O que vai rolar na <span class="gradient-text">Aula Magna?</span></h2>
+          <p class="section-desc" style="color: rgba(0,0,0,0.7);">Um evento online e ao vivo para revelar todos os detalhes da Pós-Graduação em Geoprocessamento, Georreferenciamento e Sensoriamento.</p>
+        </div>
+
+        <div class="details-grid reveal delay-1" style="margin-bottom: 40px;">
+          <!-- Item 1 -->
+          <div class="detail-card glassmorphism" style="background: #fff; border-color: rgba(0,0,0,0.1);">
+            <h3 style="color: #000d14;">Ementa Completa</h3>
+            <p style="color: rgba(0,0,0,0.7);">Descubra a grade curricular prática desenhada para te levar do zero ao domínio do GGSR no setor ambiental.</p>
           </div>
-          <h2>Acesso Exclusivo ao Grupo VIP</h2>
-          <p>Após preencher os dados de inscrição acima, você terá acesso ao nosso grupo fechado no WhatsApp. Lá nós compartilharemos:</p>
-          <ul class="vip-benefits-list">
-            <li><i data-lucide="check"></i> O link direto da transmissão da Aula Magna sem interrupções.</li>
-            <li><i data-lucide="check"></i> Os materiais de apoio, slides e e-books da aula.</li>
-            <li><i data-lucide="check"></i> Em primeira mão, as condições exclusivas e o desconto para a nova turma.</li>
-          </ul>
-          <a href="#hero" class="btn btn-primary btn-lg btn-glow">Inscrever-se na Aula Magna Agora</a>
+          <!-- Item 2 -->
+          <div class="detail-card glassmorphism" style="background: #fff; border-color: rgba(0,0,0,0.1);">
+            <h3 style="color: #000d14;">Corpo Docente</h3>
+            <p style="color: rgba(0,0,0,0.7);">Conheça os mentores e especialistas do mercado que vão te guiar nessa jornada de especialização.</p>
+          </div>
+          <!-- Item 3 -->
+          <div class="detail-card glassmorphism" style="background: #fff; border-color: rgba(0,0,0,0.1);">
+            <h3 style="color: #000d14;">Para Quem É?</h3>
+            <p style="color: rgba(0,0,0,0.7);">Entenda o perfil profissional exigido e como essa especialização pode proteger e alavancar sua carreira.</p>
+          </div>
+        </div>
+
+        <div class="reveal delay-2">
+          <div class="glassmorphism" style="padding: 32px 40px; border-color: var(--color-primary); background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+              <i data-lucide="gift" style="color: var(--color-primary); width: 40px; height: 40px; flex-shrink: 0;"></i>
+              <h3 style="color: #000d14; font-size: 1.6rem; margin: 0;">Condição Especial</h3>
+            </div>
+            <p style="color: rgba(0,0,0,0.7); font-size: 1.1rem; margin: 0; line-height: 1.6; flex: 1; min-width: 200px;">
+              Quem estiver participando <strong>ao vivo</strong> na Aula Magna terá acesso em primeira mão a uma oferta com <strong>desconto exclusivo</strong> para garantir vaga na nova turma da Pós GGSR.
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
+    <!-- Group VIP Section -->
+    <section class="section-padding group-vip-section bg-dark-layer">
+      <div class="container text-center reveal" style="max-width: 900px; margin: 0 auto;">
+
+        <!-- Title -->
+        <h2 style="font-size: 2.4rem; font-weight: 800; margin-bottom: 16px; letter-spacing: -0.02em;">
+          Acesso Exclusivo ao <span style="color: var(--color-primary);">Grupo VIP</span>
+        </h2>
+
+        <!-- Subtitle -->
+        <p style="font-size: 1.15rem; color: rgba(255,255,255,0.7); max-width: 600px; margin: 0 auto 40px auto; line-height: 1.6;">
+          Após preencher os dados de inscrição acima, você terá <strong style="color: var(--color-primary);">acesso ao nosso grupo fechado no WhatsApp.</strong> Lá nós compartilharemos:
+        </p>
+
+        <!-- Benefits Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 40px;">
+          <!-- Benefit 1 -->
+          <div class="glassmorphism" style="border-radius: 16px; padding: 32px 24px; display: flex; flex-direction: column; justify-content: center;">
+            <div style="width: 48px; height: 48px; background: rgba(124, 191, 57, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+              <i data-lucide="link" style="color: var(--color-primary); width: 22px; height: 22px;"></i>
+            </div>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; line-height: 1.4;">O link direto da<br>transmissão da Aula Magna</h4>
+            <div style="width: 24px; height: 2px; background: var(--color-primary); margin: 0 auto 16px auto;"></div>
+            <p style="font-size: 0.95rem; color: rgba(255,255,255,0.6); margin: 0;">sem interrupções.</p>
+          </div>
+
+          <!-- Benefit 2 -->
+          <div class="glassmorphism" style="border-radius: 16px; padding: 32px 24px; display: flex; flex-direction: column; justify-content: center;">
+            <div style="width: 48px; height: 48px; background: rgba(124, 191, 57, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto;">
+              <i data-lucide="tags" style="color: var(--color-primary); width: 22px; height: 22px;"></i>
+            </div>
+            <h4 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; line-height: 1.4;">Em primeira mão, as<br>condições exclusivas e o<br>desconto para a nova turma.</h4>
+            <div style="width: 24px; height: 2px; background: var(--color-primary); margin: 0 auto 0 auto;"></div>
+          </div>
+        </div>
+
+        <!-- Button -->
+        <a href="#hero" class="btn btn-primary btn-block btn-lg btn-glow" style="display: flex; justify-content: center; align-items: center; gap: 12px; font-size: 1.2rem; padding: 22px; border-radius: 12px; font-weight: 700;">
+          Inscrever-se na Aula Magna Agora <i data-lucide="arrow-right"></i>
+        </a>
+
+        <!-- Footer Info -->
+        <div style="display: flex; justify-content: center; align-items: center; gap: 16px; margin-top: 24px; flex-wrap: wrap;">
+          <div style="display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.5); font-size: 0.9rem;">
+            <i data-lucide="shield-check" style="width: 16px; height: 16px; color: var(--color-primary);"></i> Grupo fechado
+          </div>
+          <div style="width: 1px; height: 16px; background: rgba(255,255,255,0.1);"></div>
+          <div style="display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.5); font-size: 0.9rem;">
+            <i data-lucide="lock" style="width: 16px; height: 16px; color: var(--color-primary);"></i> Apenas para inscritos
+          </div>
+          <div style="width: 1px; height: 16px; background: rgba(255,255,255,0.1);"></div>
+          <div style="display: flex; align-items: center; gap: 8px; color: rgba(255,255,255,0.5); font-size: 0.9rem;">
+            <i data-lucide="message-circle" style="width: 16px; height: 16px; color: var(--color-primary);"></i> Sem spam
+          </div>
+        </div>
+
+      </div>
+    </section>
+
     <!-- Details Section -->
-    <section id="detalhes" class="section-padding details-section bg-dark-layer">
+    <section id="detalhes" class="section-padding details-section bg-light-layer">
       <div class="container">
         <div class="section-header text-center reveal">
-          <h2 class="section-title">O que você precisa saber sobre a <span class="gradient-text">Pós-Graduação GGSR</span></h2>
-          <p class="section-desc">Uma especialização profissional completa, estruturada para atender às demandas de mercado com máxima flexibilidade jurídica e técnica.</p>
+          <h2 class="section-title" style="color: #000d14;">O que você precisa saber sobre a <span class="gradient-text">Pós-Graduação GGSR</span></h2>
+          <p class="section-desc" style="color: rgba(0,0,0,0.7);">Uma especialização profissional completa, estruturada para atender às demandas de mercado com máxima flexibilidade jurídica e técnica.</p>
         </div>
 
         <div class="details-grid reveal delay-1">
           <!-- Card 1 -->
-          <div class="detail-card glassmorphism">
-            <div class="detail-icon"><i data-lucide="video"></i></div>
-            <h3>Aulas 100% Online</h3>
-            <p>Estude no seu próprio ritmo, de onde quiser e com acesso vitalício.</p>
+          <div class="detail-card glassmorphism" style="background: #fff; border-color: rgba(0,0,0,0.1);">
+            <div class="detail-icon" style="color: var(--color-primary); background: rgba(89, 178, 127, 0.1);"><i data-lucide="video"></i></div>
+            <h3 style="color: #000d14;">Aulas 100% Online</h3>
+            <p style="color: rgba(0,0,0,0.7);">Estude no seu próprio ritmo, de onde quiser e com acesso vitalício.</p>
           </div>
           <!-- Card 2 -->
-          <div class="detail-card glassmorphism">
-            <div class="detail-icon"><i data-lucide="calendar"></i></div>
-            <h3>Duração de 12 Meses</h3>
-            <p>Conclua a sua especialização e conquiste seu título em apenas 1 ano.</p>
+          <div class="detail-card glassmorphism" style="background: #fff; border-color: rgba(0,0,0,0.1);">
+            <div class="detail-icon" style="color: var(--color-primary); background: rgba(89, 178, 127, 0.1);"><i data-lucide="calendar"></i></div>
+            <h3 style="color: #000d14;">Duração de 12 Meses</h3>
+            <p style="color: rgba(0,0,0,0.7);">Conclua a sua especialização e conquiste seu título em apenas 1 ano.</p>
           </div>
           <!-- Card 3 -->
-          <div class="detail-card glassmorphism">
-            <div class="detail-icon"><i data-lucide="clock"></i></div>
-            <h3>Carga Horária de 440h</h3>
-            <p>Conteúdo completo do básico ao avançado com programação aplicada.</p>
+          <div class="detail-card glassmorphism" style="background: #fff; border-color: rgba(0,0,0,0.1);">
+            <div class="detail-icon" style="color: var(--color-primary); background: rgba(89, 178, 127, 0.1);"><i data-lucide="clock"></i></div>
+            <h3 style="color: #000d14;">Carga Horária de 440h</h3>
+            <p style="color: rgba(0,0,0,0.7);">Conteúdo completo do básico ao avançado com programação aplicada.</p>
           </div>
           <!-- Card 4 -->
-          <div class="detail-card glassmorphism">
-            <div class="detail-icon"><i data-lucide="clipboard-check"></i></div>
-            <h3>Provas Práticas e Objetivas</h3>
-            <p>Avaliações diretas e objetivas, com até 3 tentativas por disciplina.</p>
+          <div class="detail-card glassmorphism" style="background: #fff; border-color: rgba(0,0,0,0.1);">
+            <div class="detail-icon" style="color: var(--color-primary); background: rgba(89, 178, 127, 0.1);"><i data-lucide="clipboard-check"></i></div>
+            <h3 style="color: #000d14;">Provas Práticas e Objetivas</h3>
+            <p style="color: rgba(0,0,0,0.7);">Avaliações diretas e objetivas, com até 3 tentativas por disciplina.</p>
           </div>
           <!-- Card 5 -->
-          <div class="detail-card glassmorphism">
-            <div class="detail-icon"><i data-lucide="gem"></i></div>
-            <h3>Título Profissional</h3>
-            <p>Torne-se Especialista em Geoprocessamento, Georreferenciamento e Sensoriamento.</p>
+          <div class="detail-card glassmorphism" style="background: #fff; border-color: rgba(0,0,0,0.1);">
+            <div class="detail-icon" style="color: var(--color-primary); background: rgba(89, 178, 127, 0.1);"><i data-lucide="gem"></i></div>
+            <h3 style="color: #000d14;">Título Profissional</h3>
+            <p style="color: rgba(0,0,0,0.7);">Torne-se Especialista em Geoprocessamento, Georreferenciamento e Sensoriamento.</p>
           </div>
           <!-- Card 6 -->
-          <div class="detail-card glassmorphism">
-            <div class="detail-icon"><i data-lucide="graduation-cap"></i></div>
-            <h3>Diploma Chancelado pelo MEC</h3>
-            <p>Especialização reconhecida nacionalmente para acelerar sua carreira.</p>
+          <div class="detail-card glassmorphism" style="background: #fff; border-color: rgba(0,0,0,0.1);">
+            <div class="detail-icon" style="color: var(--color-primary); background: rgba(89, 178, 127, 0.1);"><i data-lucide="graduation-cap"></i></div>
+            <h3 style="color: #000d14;">Diploma Chancelado pelo MEC</h3>
+            <p style="color: rgba(0,0,0,0.7);">Especialização reconhecida nacionalmente para acelerar sua carreira.</p>
           </div>
         </div>
       </div>
@@ -832,6 +914,8 @@
     <img class="lightbox-content" id="lightbox-img" src="" alt="Imagem Ampliada">
   </div>
 
+  <!-- intl-tel-input JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/js/intlTelInput.min.js"></script>
   <!-- Scripts -->
   <script type="module" src="./script.js"></script>
 </body>
