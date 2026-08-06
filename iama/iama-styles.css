@@ -131,7 +131,7 @@ a {
   width: 700px;
   height: 700px;
   border-radius: 50%;
-  filter: blur(150px);
+  /* filter: blur(150px); - Removido pois causa crash/piscadas no iOS Safari */
   opacity: 0.18;
   /* Aumentado de 0.12 para brilho mais vívido */
   pointer-events: none;
