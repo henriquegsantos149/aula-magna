@@ -395,7 +395,7 @@ function initFormControls() {
 
   // Clean input
   phoneInput.addEventListener('input', (e) => {
-    let value = e.target.value.replace(/[^\d+]/g, ''); 
+    let value = e.target.value.replace(/[^\d+\s-]/g, ''); 
     e.target.value = value;
     phoneInput.setCustomValidity('');
   });
@@ -436,7 +436,6 @@ function initFormControls() {
     // Prepare Lead Data
     const formData = new FormData(form);
     const leadData = {
-      origin: 'ggsr_l19',
       name: formData.get('nome'),
       email: formData.get('email'),
       whatsapp: formData.get('telefone'),
@@ -450,21 +449,11 @@ function initFormControls() {
     
     urlParams.forEach((val, key) => {
       const lowerKey = key.toLowerCase();
-      if (lowerKey.includes('utm_')) {
-        redirectUrl.searchParams.append(key, val); // Pass to Tally
-        
-        if (lowerKey.includes('utm_campaign')) leadData.utm_campaign = val;
-        else if (lowerKey.includes('utm_source') || lowerKey.includes('utm_souce')) leadData.utm_source = val;
-        else if (lowerKey.includes('utm_medium')) leadData.utm_medium = val;
-        else if (lowerKey.includes('utm_term')) leadData.utm_term = val;
-        else if (lowerKey.includes('utm_content')) leadData.utm_content = val;
+      if (lowerKey.startsWith('utm_')) {
+        redirectUrl.searchParams.append(key, val);
+        leadData[lowerKey] = val;
       }
     });
-
-    // Meta Pixel Lead Event
-    if (typeof fbq === 'function') {
-      fbq('track', 'Lead');
-    }
 
     // GTM DataLayer Push
     if (window.dataLayer) {
@@ -473,9 +462,6 @@ function initFormControls() {
         formId: 'enrollment-form',
         leadEmail: leadData.email,
         leadGraduation: leadData.graduation
-      });
-      window.dataLayer.push({
-        event: 'Lead'
       });
     }
 
