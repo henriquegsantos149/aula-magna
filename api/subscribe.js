@@ -100,6 +100,7 @@ export default async function handler(req, res) {
       contact: {
         email: email,
         firstName: name,
+        lastName: "",
         phone: whatsapp,
         fieldValues: fieldValues
       }
