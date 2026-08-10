@@ -450,9 +450,14 @@ function initFormControls() {
     
     urlParams.forEach((val, key) => {
       const lowerKey = key.toLowerCase();
-      if (lowerKey.startsWith('utm_')) {
-        redirectUrl.searchParams.append(key, val);
-        leadData[lowerKey] = val;
+      if (lowerKey.includes('utm_')) {
+        redirectUrl.searchParams.append(key, val); // Pass to Tally
+        
+        if (lowerKey.includes('utm_campaign')) leadData.utm_campaign = val;
+        else if (lowerKey.includes('utm_source') || lowerKey.includes('utm_souce')) leadData.utm_source = val;
+        else if (lowerKey.includes('utm_medium')) leadData.utm_medium = val;
+        else if (lowerKey.includes('utm_term')) leadData.utm_term = val;
+        else if (lowerKey.includes('utm_content')) leadData.utm_content = val;
       }
     });
 
