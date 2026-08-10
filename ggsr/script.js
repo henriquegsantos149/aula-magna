@@ -395,7 +395,7 @@ function initFormControls() {
 
   // Clean input
   phoneInput.addEventListener('input', (e) => {
-    let value = e.target.value.replace(/[^\d+\s-]/g, ''); 
+    let value = e.target.value.replace(/[^\d+]/g, ''); 
     e.target.value = value;
     phoneInput.setCustomValidity('');
   });
