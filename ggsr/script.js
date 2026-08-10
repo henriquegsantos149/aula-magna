@@ -456,6 +456,11 @@ function initFormControls() {
       }
     });
 
+    // Meta Pixel Lead Event
+    if (typeof fbq === 'function') {
+      fbq('track', 'Lead');
+    }
+
     // GTM DataLayer Push
     if (window.dataLayer) {
       window.dataLayer.push({
@@ -463,6 +468,9 @@ function initFormControls() {
         formId: 'enrollment-form',
         leadEmail: leadData.email,
         leadGraduation: leadData.graduation
+      });
+      window.dataLayer.push({
+        event: 'Lead'
       });
     }
 
