@@ -436,6 +436,7 @@ function initFormControls() {
     // Prepare Lead Data
     const formData = new FormData(form);
     const leadData = {
+      origin: 'ggsr_l19',
       name: formData.get('nome'),
       email: formData.get('email'),
       whatsapp: formData.get('telefone'),

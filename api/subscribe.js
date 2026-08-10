@@ -68,6 +68,19 @@ export default async function handler(req, res) {
       ].filter(f => f.value && f.value !== "");
       
       tagId = "470"; // [L02][PÓS][IA.MA] Lead
+    } else if (origin === 'ggsr_l19') {
+      fieldValues = [
+        { field: "848", value: utm_term },
+        { field: "849", value: currentDateISO },
+        { field: "850", value: graduation },
+        { field: "851", value: education_area },
+        { field: "852", value: utm_campaign },
+        { field: "853", value: utm_source },
+        { field: "854", value: utm_medium },
+        { field: "855", value: utm_content }
+      ].filter(f => f.value && f.value !== "");
+      
+      tagId = "473"; // [L19][PÓS][GGSR] Lead
     } else {
       fieldValues = [
         { field: "772", value: utm_term },
