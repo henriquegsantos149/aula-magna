@@ -449,9 +449,14 @@ function initFormControls() {
     
     urlParams.forEach((val, key) => {
       const lowerKey = key.toLowerCase();
-      if (lowerKey.startsWith('utm_')) {
+      if (lowerKey.startsWith('utm_') || lowerKey.startsWith('l19psggsr_utm_')) {
         redirectUrl.searchParams.append(key, val);
-        leadData[lowerKey] = val;
+        
+        let normalizedKey = lowerKey;
+        if (lowerKey.startsWith('l19psggsr_utm_')) {
+          normalizedKey = lowerKey.replace('l19psggsr_', '');
+        }
+        leadData[normalizedKey] = val;
       }
     });
 
