@@ -80,7 +80,7 @@ export default async function handler(req, res) {
         { field: "855", value: utm_content }
       ].filter(f => f.value && f.value !== "");
       
-      tagId = "473"; // [L19][PÓS][GGSR] Lead
+      tagId = "473"; // [AM][PÓS][GGSR] Lead
     }
 
     const contactPayload = {
