@@ -384,19 +384,49 @@ function initFormControls() {
 
   // Phone validation function
   const validatePhone = () => {
-    if (phoneInput.value.trim() === '') {
+    const rawValue = phoneInput.value.trim();
+    if (rawValue === '') {
       return { isValid: true, message: '' }; // Required attribute handles empty field
     }
+
+    const countryData = iti.getSelectedCountryData();
+    if (countryData.iso2 === 'br') {
+      let digits = rawValue.replace(/\D/g, '');
+      if (digits.startsWith('55') && digits.length > 11) {
+        digits = digits.substring(2);
+      }
+      if (digits.length !== 11) {
+        return { isValid: false, message: 'Por favor, insira o DDD e o número com o 9 na frente (11 dígitos).' };
+      }
+      return { isValid: true, message: '' };
+    }
+
     if (iti.isValidNumber()) {
       return { isValid: true, message: '' };
     }
     return { isValid: false, message: 'Número de telefone inválido para o país selecionado.' };
   };
 
-  // Clean input
+  // Clean and format input
   phoneInput.addEventListener('input', (e) => {
-    let value = e.target.value.replace(/[^\d+\s-]/g, ''); 
-    e.target.value = value;
+    const countryData = iti.getSelectedCountryData();
+    if (countryData.iso2 === 'br') {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.startsWith('55') && value.length > 11) value = value.substring(2);
+      if (value.length > 11) value = value.substring(0, 11);
+      
+      let formattedValue = value;
+      if (value.length > 2) {
+        formattedValue = '(' + value.substring(0, 2) + ') ' + value.substring(2);
+      }
+      if (value.length > 7) {
+        formattedValue = '(' + value.substring(0, 2) + ') ' + value.substring(2, 7) + '-' + value.substring(7);
+      }
+      e.target.value = formattedValue;
+    } else {
+      let value = e.target.value.replace(/[^\d+\s-]/g, ''); 
+      e.target.value = value;
+    }
     phoneInput.setCustomValidity('');
   });
 
@@ -435,10 +465,13 @@ function initFormControls() {
 
     // Prepare Lead Data
     const formData = new FormData(form);
+    const rawTelefone = formData.get('telefone') || '';
+    const cleanTelefone = rawTelefone.replace(/\D/g, '');
+
     const leadData = {
       name: formData.get('nome'),
       email: formData.get('email'),
-      whatsapp: formData.get('telefone'),
+      whatsapp: cleanTelefone,
       graduation: formData.get('graduacao'),
       education_area: formData.get('area_formacao') || ''
     };
