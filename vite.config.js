@@ -10,7 +10,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'ggsr/index.html'),
-        matricula: resolve(__dirname, 'ggsr/pagina-de-matricula.html'),
+        matricula: resolve(__dirname, 'ggsr/matricula.html'),
         iama: resolve(__dirname, 'iama/index.html'),
         iama_matricula: resolve(__dirname, 'iama/pagina-de-matricula.html')
       }
