@@ -12,6 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
   initCarousels();
   initLightbox();
   initFormControls();
+
+  // Disparo de ViewContent para a página principal da Aula Magna
+  trackMeta('ViewContent', {
+    customData: {
+      content_name: 'Aula Magna GGSR',
+      content_category: 'aula-magna'
+    }
+  });
 });
 
 // 1. Sticky Header
@@ -504,6 +512,27 @@ function initFormControls() {
       });
     }
 
+    // Meta Tracking (Pixel + Conversions API)
+    const metaOptions = {
+      customData: {
+        content_name: 'Aula Magna GGSR',
+        content_category: 'aula-magna'
+      },
+      userData: {
+        nome: leadData.name,
+        email: leadData.email,
+        telefone: leadData.whatsapp
+      }
+    };
+
+    // Lead para todo submit de formulário
+    trackMeta('Lead', metaOptions);
+
+    // lead_qualificado se possuir formação
+    if (leadData.graduation && leadData.graduation.toString().toLowerCase() === 'sim') {
+      trackMeta('lead_qualificado', metaOptions);
+    }
+
     // Call subscribe API (like Curso webgis)
     fetch('/api/subscribe', {
       method: 'POST',
@@ -524,6 +553,72 @@ function initFormControls() {
       window.location.href = redirectUrl.toString();
     });
   });
+}
+
+// ==========================================
+// Meta Tracking & Conversions API Helpers
+// ==========================================
+const STANDARD_META_EVENTS = ['Lead', 'ViewContent'];
+
+function readCookie(cookieString, name) {
+  if (!cookieString) return undefined;
+  for (const part of cookieString.split(';')) {
+    const separator = part.indexOf('=');
+    if (separator < 1) continue;
+    if (part.slice(0, separator).trim() !== name) continue;
+    return part.slice(separator + 1).trim();
+  }
+  return undefined;
+}
+
+function deriveFbc(searchString, cookieString, now) {
+  const existing = readCookie(cookieString, '_fbc');
+  if (existing) return existing;
+  const fbclid = new URLSearchParams(searchString).get('fbclid');
+  if (!fbclid) return undefined;
+  return `fb.1.${now}.${fbclid}`;
+}
+
+function trackMeta(eventName, options = {}) {
+  if (typeof window === 'undefined') return;
+
+  try {
+    const eventId =
+      (window.crypto && window.crypto.randomUUID)
+        ? window.crypto.randomUUID()
+        : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+    const method = STANDARD_META_EVENTS.includes(eventName) ? 'track' : 'trackCustom';
+
+    try {
+      if (typeof window.fbq === 'function') {
+        window.fbq(method, eventName, options.customData, { eventID: eventId });
+      }
+    } catch (e) {
+      /* falha no pixel nao deve travar a CAPI */
+    }
+
+    const cookieString = typeof document !== 'undefined' ? (document.cookie || '') : '';
+
+    fetch('/api/meta-capi', {
+      method: 'POST',
+      keepalive: true,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event_name: eventName,
+        event_id: eventId,
+        event_source_url: window.location.href,
+        fbp: readCookie(cookieString, '_fbp'),
+        fbc: deriveFbc(window.location.search, cookieString, Date.now()),
+        custom_data: options.customData,
+        ...options.userData,
+      }),
+    }).catch(() => {
+      /* silencioso de proposito */
+    });
+  } catch (err) {
+    /* tracking nunca deve afetar a UX do usuario */
+  }
 }
 
 // Global Custom styling injector for spinning animations
