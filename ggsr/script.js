@@ -301,8 +301,12 @@ function initCarousels() {
     buildDots();
     updateSlider(false);
 
+    let lastInnerWidth = window.innerWidth;
     window.addEventListener('resize', () => {
-      updateSlider(false);
+      if (window.innerWidth !== lastInnerWidth) {
+        lastInnerWidth = window.innerWidth;
+        updateSlider(false);
+      }
     });
   }
 }

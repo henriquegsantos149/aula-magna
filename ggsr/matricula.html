@@ -1028,8 +1028,8 @@
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       // Aula Magna Date: 26/08/2026 (00:00:00 to 23:59:59)
-      const startAulaMagna = new Date('2026-08-26T00:00:00').getTime();
-      const endAulaMagna = new Date('2026-08-26T23:59:59').getTime();
+      const startAulaMagna = new Date(2026, 7, 26, 0, 0, 0).getTime();
+      const endAulaMagna = new Date(2026, 7, 26, 23, 59, 59).getTime();
 
       const countdownContainer = document.getElementById('oferta-countdown-container');
       const countdownText = document.getElementById('oferta-countdown-text');
@@ -1057,10 +1057,10 @@
       let timeOffset = 0;
 
       if (debugDay === '26' || debugDay === 'aulamagna' || isPreview) {
-        const simulatedStart = new Date('2026-08-26T14:00:00').getTime();
+        const simulatedStart = new Date(2026, 7, 26, 14, 0, 0).getTime();
         timeOffset = simulatedStart - new Date().getTime();
       } else if (debugDay === '27' || isAfter) {
-        const simulatedAfter = new Date('2026-08-27T10:00:00').getTime();
+        const simulatedAfter = new Date(2026, 7, 27, 10, 0, 0).getTime();
         timeOffset = simulatedAfter - new Date().getTime();
       }
 
