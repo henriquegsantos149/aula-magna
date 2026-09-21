@@ -1,26 +1,3 @@
 {
-  "cleanUrls": true,
-  "redirects": [
-    {
-      "source": "/pagina-de-matricula",
-      "destination": "https://ambientalpro.com.br",
-      "permanent": true
-    },
-    {
-      "source": "/pagina-de-matricula.html",
-      "destination": "https://ambientalpro.com.br",
-      "permanent": true
-    },
-    {
-      "source": "/",
-      "has": [
-        {
-          "type": "host",
-          "value": "aulamagna.ambientalpro.com.br"
-        }
-      ],
-      "destination": "https://www.ambientalpro.com.br",
-      "permanent": false
-    }
-  ]
+  "cleanUrls": true
 }
