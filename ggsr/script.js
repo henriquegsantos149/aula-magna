@@ -388,61 +388,41 @@ function initFormControls() {
     }
   });
 
-  // Initialize intl-tel-input
-  const iti = window.intlTelInput(phoneInput, {
-    initialCountry: "br",
-    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/js/utils.js",
-  });
-
-  // Phone validation function
+  // Phone validation function (DDD + Número)
   const validatePhone = () => {
     const rawValue = phoneInput.value.trim();
     if (rawValue === '') {
-      return { isValid: true, message: '' }; // Required attribute handles empty field
-    }
-
-    const countryData = iti.getSelectedCountryData();
-    if (countryData.iso2 === 'br') {
-      let digits = rawValue.replace(/\D/g, '');
-      if (digits.startsWith('55') && digits.length > 11) {
-        digits = digits.substring(2);
-      }
-      if (digits.length !== 11) {
-        return { isValid: false, message: 'Por favor, insira o DDD e o número com o 9 na frente (11 dígitos).' };
-      }
       return { isValid: true, message: '' };
     }
 
-    if (iti.isValidNumber()) {
-      return { isValid: true, message: '' };
+    let digits = rawValue.replace(/\D/g, '');
+    if (digits.startsWith('55') && digits.length > 11) {
+      digits = digits.substring(2);
     }
-    return { isValid: false, message: 'Número de telefone inválido para o país selecionado.' };
+    if (digits.length !== 11) {
+      return { isValid: false, message: 'Por favor, insira o DDD e o número com o 9 na frente (ex: (21) 99999-9999).' };
+    }
+    return { isValid: true, message: '' };
   };
 
-  // Clean and format input
+  // Clean and format input with standard (XX) XXXXX-XXXX mask
   phoneInput.addEventListener('input', (e) => {
-    const countryData = iti.getSelectedCountryData();
-    if (countryData.iso2 === 'br') {
-      let value = e.target.value.replace(/\D/g, '');
-      if (value.startsWith('55') && value.length > 11) value = value.substring(2);
-      if (value.length > 11) value = value.substring(0, 11);
-      
-      let formattedValue = value;
-      if (value.length > 2) {
-        formattedValue = '(' + value.substring(0, 2) + ') ' + value.substring(2);
-      }
-      if (value.length > 7) {
-        formattedValue = '(' + value.substring(0, 2) + ') ' + value.substring(2, 7) + '-' + value.substring(7);
-      }
-      e.target.value = formattedValue;
-    } else {
-      let value = e.target.value.replace(/[^\d+\s-]/g, ''); 
-      e.target.value = value;
+    let value = e.target.value.replace(/\D/g, '');
+    if (value.startsWith('55') && value.length > 11) value = value.substring(2);
+    if (value.length > 11) value = value.substring(0, 11);
+    
+    let formattedValue = value;
+    if (value.length > 2) {
+      formattedValue = '(' + value.substring(0, 2) + ') ' + value.substring(2);
     }
+    if (value.length > 7) {
+      formattedValue = '(' + value.substring(0, 2) + ') ' + value.substring(2, 7) + '-' + value.substring(7);
+    }
+    e.target.value = formattedValue;
     phoneInput.setCustomValidity('');
   });
 
-  // Validate on blur (quietly, without reporting)
+  // Validate on blur
   phoneInput.addEventListener('blur', () => {
     const validation = validatePhone();
     if (!validation.isValid) {
