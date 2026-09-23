@@ -54,30 +54,38 @@ export default async function handler(req, res) {
     let fieldValues = [];
     let tagId = "";
 
+    // Normalização das UTMs recebidas
+    const utm_term_val = utm_term || data.l20psggsr_utm_term || data.l19psggsr_utm_term || '';
+    const utm_campaign_val = utm_campaign || data.l20psggsr_utm_campaign || data.l19psggsr_utm_campaign || '';
+    const utm_source_val = utm_source || data.l20psggsr_utm_source || data.l19psggsr_utm_source || '';
+    const utm_medium_val = utm_medium || data.l20psggsr_utm_medium || data.l19psggsr_utm_medium || '';
+    const utm_content_val = utm_content || data.l20psggsr_utm_content || data.l19psggsr_utm_content || '';
+
     // Configuração baseada na origem da requisição
     if (origin === 'iama') {
       fieldValues = [
-        { field: "844", value: utm_term },
+        { field: "844", value: utm_term_val },
         { field: "847", value: currentDateISO },
         { field: "845", value: graduation },
         { field: "846", value: education_area },
-        { field: "840", value: utm_campaign },
-        { field: "841", value: utm_source },
-        { field: "842", value: utm_medium },
-        { field: "843", value: utm_content }
+        { field: "840", value: utm_campaign_val },
+        { field: "841", value: utm_source_val },
+        { field: "842", value: utm_medium_val },
+        { field: "843", value: utm_content_val }
       ].filter(f => f.value && f.value !== "");
       
       tagId = "470"; // [L02][PÓS][IA.MA] Lead
+    } else {
       // [L20][PÓS][GGSR] Tracking Fields & Tag
       fieldValues = [
-        { field: "848", value: utm_term },             // [L20][PÓS][GGSR] UTM Term
-        { field: "849", value: currentDateISO },        // [L20][PÓS][GGSR] UTM Data de Inscrição
-        { field: "850", value: graduation },            // [L20][PÓS][GGSR] UTM Possui Graduação
-        { field: "851", value: education_area },        // [L20][PÓS][GGSR] UTM Área de Formação
-        { field: "852", value: utm_campaign },          // [L20][PÓS][GGSR] UTM Campaign
-        { field: "853", value: utm_source },            // [L20][PÓS][GGSR] UTM Source
-        { field: "854", value: utm_medium },            // [L20][PÓS][GGSR] UTM Medium
-        { field: "855", value: utm_content }            // [L20][PÓS][GGSR] UTM Content
+        { field: "848", value: utm_term_val },             // [L20][PÓS][GGSR] UTM Term
+        { field: "849", value: currentDateISO },            // [L20][PÓS][GGSR] UTM Data de Inscrição
+        { field: "850", value: graduation },                // [L20][PÓS][GGSR] UTM Possui Graduação
+        { field: "851", value: education_area },            // [L20][PÓS][GGSR] UTM Área de Formação
+        { field: "852", value: utm_campaign_val },          // [L20][PÓS][GGSR] UTM Campaign
+        { field: "853", value: utm_source_val },            // [L20][PÓS][GGSR] UTM Source
+        { field: "854", value: utm_medium_val },            // [L20][PÓS][GGSR] UTM Medium
+        { field: "855", value: utm_content_val }            // [L20][PÓS][GGSR] UTM Content
       ].filter(f => f.value && f.value !== "");
       
       tagId = "473"; // [L20][PÓS][GGSR] Lead
