@@ -78,17 +78,17 @@ export default async function handler(req, res) {
     } else {
       // [L20][PÓS][GGSR] Tracking Fields & Tag
       fieldValues = [
-        { field: "848", value: utm_term_val },             // [L20][PÓS][GGSR] UTM Term
-        { field: "849", value: currentDateISO },            // [L20][PÓS][GGSR] UTM Data de Inscrição
-        { field: "850", value: graduation },                // [L20][PÓS][GGSR] UTM Possui Graduação
-        { field: "851", value: education_area },            // [L20][PÓS][GGSR] UTM Área de Formação
-        { field: "852", value: utm_campaign_val },          // [L20][PÓS][GGSR] UTM Campaign
-        { field: "853", value: utm_source_val },            // [L20][PÓS][GGSR] UTM Source
-        { field: "854", value: utm_medium_val },            // [L20][PÓS][GGSR] UTM Medium
-        { field: "855", value: utm_content_val }            // [L20][PÓS][GGSR] UTM Content
+        { field: "896", value: utm_term_val },             // [L20][PÓS][GGSR] UTM Term
+        { field: "907", value: currentDateISO },            // [L20][PÓS][GGSR] UTM Data de Inscrição
+        { field: "898", value: graduation },                // [L20][PÓS][GGSR] UTM Possui Graduação
+        { field: "899", value: education_area },            // [L20][PÓS][GGSR] UTM Área de Formação
+        { field: "900", value: utm_campaign_val },          // [L20][PÓS][GGSR] UTM Campaign
+        { field: "904", value: utm_source_val },            // [L20][PÓS][GGSR] UTM Source
+        { field: "902", value: utm_medium_val },            // [L20][PÓS][GGSR] UTM Medium
+        { field: "903", value: utm_content_val }            // [L20][PÓS][GGSR] UTM Content
       ].filter(f => f.value && f.value !== "");
       
-      tagId = "473"; // [L20][PÓS][GGSR] Lead
+      tagId = "486"; // [L20][PÓS][GGSR] Lead
     }
 
     const contactPayload = {
