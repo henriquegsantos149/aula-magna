@@ -68,19 +68,19 @@ export default async function handler(req, res) {
       ].filter(f => f.value && f.value !== "");
       
       tagId = "470"; // [L02][PÓS][IA.MA] Lead
-    } else {
+      // [L20][PÓS][GGSR] Tracking Fields & Tag
       fieldValues = [
-        { field: "848", value: utm_term },
-        { field: "849", value: currentDateISO },
-        { field: "850", value: graduation },
-        { field: "851", value: education_area },
-        { field: "852", value: utm_campaign },
-        { field: "853", value: utm_source },
-        { field: "854", value: utm_medium },
-        { field: "855", value: utm_content }
+        { field: "848", value: utm_term },             // [L20][PÓS][GGSR] UTM Term
+        { field: "849", value: currentDateISO },        // [L20][PÓS][GGSR] UTM Data de Inscrição
+        { field: "850", value: graduation },            // [L20][PÓS][GGSR] UTM Possui Graduação
+        { field: "851", value: education_area },        // [L20][PÓS][GGSR] UTM Área de Formação
+        { field: "852", value: utm_campaign },          // [L20][PÓS][GGSR] UTM Campaign
+        { field: "853", value: utm_source },            // [L20][PÓS][GGSR] UTM Source
+        { field: "854", value: utm_medium },            // [L20][PÓS][GGSR] UTM Medium
+        { field: "855", value: utm_content }            // [L20][PÓS][GGSR] UTM Content
       ].filter(f => f.value && f.value !== "");
       
-      tagId = "473"; // [AM][PÓS][GGSR] Lead
+      tagId = "473"; // [L20][PÓS][GGSR] Lead
     }
 
     const contactPayload = {

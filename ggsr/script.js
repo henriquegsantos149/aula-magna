@@ -494,10 +494,12 @@ function initFormControls() {
     
     urlParams.forEach((val, key) => {
       const lowerKey = key.toLowerCase();
-      if (lowerKey.startsWith('utm_') || lowerKey.startsWith('l19psggsr_utm_')) {
+      if (lowerKey.startsWith('utm_') || lowerKey.startsWith('l19psggsr_utm_') || lowerKey.startsWith('l20psggsr_utm_')) {
         let normalizedKey = lowerKey;
-        if (lowerKey.startsWith('l19psggsr_utm_')) {
+        if (lowerKey.startsWith('l19psggsr_')) {
           normalizedKey = lowerKey.replace('l19psggsr_', '');
+        } else if (lowerKey.startsWith('l20psggsr_')) {
+          normalizedKey = lowerKey.replace('l20psggsr_', '');
         }
         
         // Passar os UTMs limpos para o Tally também
