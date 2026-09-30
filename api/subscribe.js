@@ -47,8 +47,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'O email é obrigatório.' });
     }
 
-    // Obter a data atual no fuso horário de São Paulo (formato DD/MM/YYYY)
+    // Obter a data atual no fuso horário de São Paulo (YYYY-MM-DD para campos do tipo Data e DD/MM/YYYY para texto)
     const currentDateBR = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    const dateParts = currentDateBR.split('/');
+    const currentDateYYYYMMDD = dateParts.length === 3 ? `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}` : currentDateBR;
 
     let fieldValues = [];
     let tagId = "";
@@ -64,7 +66,7 @@ export default async function handler(req, res) {
     if (origin === 'iama') {
       fieldValues = [
         { field: "844", value: utm_term_val },
-        { field: "847", value: currentDateBR },
+        { field: "847", value: currentDateYYYYMMDD },
         { field: "845", value: graduation },
         { field: "846", value: education_area },
         { field: "840", value: utm_campaign_val },
@@ -77,9 +79,9 @@ export default async function handler(req, res) {
     } else {
       // [PÓS][GGSR] Tracking Fields (L20, L19, L18, Lista de Espera, Webinário, Módulo Zero, Geral) & Tag
       fieldValues = [
-        // L20
+        // L20 - [L20][PÓS][GGSR] UTM Data de Inscriçãoo
         { field: "896", value: utm_term_val },             // [L20][PÓS][GGSR] UTM Term
-        { field: "907", value: currentDateBR },             // [L20][PÓS][GGSR] UTM Data de Inscrição
+        { field: "907", value: currentDateYYYYMMDD },       // [L20][PÓS][GGSR] UTM Data de Inscriçãoo (YYYY-MM-DD)
         { field: "898", value: graduation },                // [L20][PÓS][GGSR] UTM Possui Graduação
         { field: "899", value: education_area },            // [L20][PÓS][GGSR] UTM Área de Formação
         { field: "900", value: utm_campaign_val },          // [L20][PÓS][GGSR] UTM Campaign
@@ -88,7 +90,7 @@ export default async function handler(req, res) {
         { field: "903", value: utm_content_val },           // [L20][PÓS][GGSR] UTM Content
 
         // L19 Fallback
-        { field: "849", value: currentDateBR },             // [L19][PÓS][GGSR] Data de Inscrição
+        { field: "849", value: currentDateYYYYMMDD },       // [L19][PÓS][GGSR] Data de Inscrição
         { field: "848", value: utm_term_val },
         { field: "850", value: graduation },
         { field: "851", value: education_area },
@@ -97,13 +99,13 @@ export default async function handler(req, res) {
         { field: "854", value: utm_medium_val },
         { field: "855", value: utm_content_val },
 
-        // Outros campos de Data GGSR e Geral
-        { field: "773", value: currentDateBR },             // [L18][PÓS][GGSR] Data de Inscrição
-        { field: "401", value: currentDateBR },             // [LISTA DE ESPERA] [POS GGSR] Data de Inscrição
-        { field: "352", value: currentDateBR },             // [WEBINARIO] [POS] [GGSR] [L1] Data de Inscrição
-        { field: "539", value: currentDateBR },             // [MÓDULO ZERO: PÓS GGSR] Data de Inscrição
-        { field: "43",  value: currentDateBR },             // Data
-        { field: "3",   value: currentDateBR }              // Inscricao mais recente
+        // Outros campos de Data GGSR e Geral (enviando YYYY-MM-DD para Date e DD/MM/YYYY para texto)
+        { field: "773", value: currentDateYYYYMMDD },       // [L18][PÓS][GGSR] Data de Inscrição
+        { field: "401", value: currentDateYYYYMMDD },       // [LISTA DE ESPERA] [POS GGSR] Data de Inscrição
+        { field: "352", value: currentDateYYYYMMDD },       // [WEBINARIO] [POS] [GGSR] [L1] Data de Inscrição
+        { field: "539", value: currentDateYYYYMMDD },       // [MÓDULO ZERO: PÓS GGSR] Data de Inscrição
+        { field: "43",  value: currentDateYYYYMMDD },       // Data
+        { field: "3",   value: currentDateYYYYMMDD }        // Inscricao mais recente
       ].filter(f => f.value && f.value !== "");
       
       tagId = "486"; // [L20][PÓS][GGSR] Lead
