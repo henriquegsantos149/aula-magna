@@ -73,6 +73,15 @@ export default async function handler(req, res) {
       console.warn("Aviso: Falha ao carregar campos customizados do ActiveCampaign dinamicamente:", err);
     }
 
+    // Função para obter o valor formatado correto com base no tipo real do campo no ActiveCampaign
+    const getFieldValueForField = (fieldId, fallbackVal) => {
+      const found = acFields.find(f => String(f.id) === String(fieldId));
+      if (found) {
+        return found.type === 'date' ? currentDateYYYYMMDD : currentDateBR;
+      }
+      return fallbackVal;
+    };
+
     // Normalização das UTMs recebidas
     const utm_term_val = utm_term || data.l20psggsr_utm_term || data.l19psggsr_utm_term || '';
     const utm_campaign_val = utm_campaign || data.l20psggsr_utm_campaign || data.l19psggsr_utm_campaign || '';
@@ -87,7 +96,7 @@ export default async function handler(req, res) {
     if (origin === 'iama') {
       fieldValues = [
         { field: "844", value: utm_term_val },
-        { field: "847", value: currentDateYYYYMMDD },
+        { field: "847", value: getFieldValueForField("847", currentDateBR) },
         { field: "845", value: graduation },
         { field: "846", value: education_area },
         { field: "840", value: utm_campaign_val },
@@ -102,7 +111,7 @@ export default async function handler(req, res) {
       fieldValues = [
         // L20
         { field: "896", value: utm_term_val },             // [L20][PÓS][GGSR] UTM Term
-        { field: "907", value: currentDateYYYYMMDD },       // [L20][PÓS][GGSR] UTM Data de Inscrição (ISO Date)
+        { field: "907", value: getFieldValueForField("907", currentDateBR) }, // [L20][PÓS][GGSR] UTM Data de Inscrição
         { field: "898", value: graduation },                // [L20][PÓS][GGSR] UTM Possui Graduação
         { field: "899", value: education_area },            // [L20][PÓS][GGSR] UTM Área de Formação
         { field: "900", value: utm_campaign_val },          // [L20][PÓS][GGSR] UTM Campaign
@@ -111,13 +120,13 @@ export default async function handler(req, res) {
         { field: "903", value: utm_content_val },           // [L20][PÓS][GGSR] UTM Content
 
         // Fallbacks adicionais de Data para GGSR
-        { field: "849", value: currentDateYYYYMMDD },       // [L19][PÓS][GGSR] Data de Inscrição
-        { field: "773", value: currentDateYYYYMMDD },       // [L18][PÓS][GGSR] Data de Inscrição
-        { field: "401", value: currentDateYYYYMMDD },       // [LISTA DE ESPERA] [POS GGSR] Data de Inscrição
-        { field: "352", value: currentDateYYYYMMDD },       // [WEBINARIO] [POS] [GGSR] [L1] Data de Inscrição
-        { field: "539", value: currentDateYYYYMMDD },       // [MÓDULO ZERO: PÓS GGSR] Data de Inscrição
-        { field: "43",  value: currentDateYYYYMMDD },       // Data
-        { field: "3",   value: currentDateYYYYMMDD }        // Inscricao mais recente
+        { field: "849", value: getFieldValueForField("849", currentDateBR) }, // [L19][PÓS][GGSR] Data de Inscrição
+        { field: "773", value: getFieldValueForField("773", currentDateBR) }, // [L18][PÓS][GGSR] Data de Inscrição
+        { field: "401", value: getFieldValueForField("401", currentDateBR) }, // [LISTA DE ESPERA] [POS GGSR] Data de Inscrição
+        { field: "352", value: getFieldValueForField("352", currentDateBR) }, // [WEBINARIO] [POS] [GGSR] [L1] Data de Inscrição
+        { field: "539", value: getFieldValueForField("539", currentDateBR) }, // [MÓDULO ZERO: PÓS GGSR] Data de Inscrição
+        { field: "43",  value: getFieldValueForField("43", currentDateBR) },  // Data
+        { field: "3",   value: getFieldValueForField("3", currentDateBR) }   // Inscricao mais recente
       ];
 
       // Adicionar dinamicamente todos os campos que contêm GGSR/POS/Aula e Data/Inscricao descobertos no ActiveCampaign
@@ -129,7 +138,10 @@ export default async function handler(req, res) {
             (normTitle.includes('data') || normTitle.includes('inscric'))
           ) {
             const val = field.type === 'date' ? currentDateYYYYMMDD : currentDateBR;
-            if (!fieldValues.some(fv => String(fv.field) === String(field.id))) {
+            const existingIndex = fieldValues.findIndex(fv => String(fv.field) === String(field.id));
+            if (existingIndex >= 0) {
+              fieldValues[existingIndex].value = val;
+            } else {
               fieldValues.push({ field: String(field.id), value: val });
             }
           }
