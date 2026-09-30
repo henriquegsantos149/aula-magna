@@ -47,9 +47,10 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'O email é obrigatório.' });
     }
 
-    // Obter a data atual
-    const currentDate = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-    const currentDateISO = new Date().toISOString();
+    // Obter a data atual no fuso horário de São Paulo (YYYY-MM-DD para compatibilidade com o ActiveCampaign)
+    const currentDateBR = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
+    const dateParts = currentDateBR.split('/');
+    const currentDateYYYYMMDD = dateParts.length === 3 ? `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}` : currentDateBR;
 
     let fieldValues = [];
     let tagId = "";
@@ -65,7 +66,7 @@ export default async function handler(req, res) {
     if (origin === 'iama') {
       fieldValues = [
         { field: "844", value: utm_term_val },
-        { field: "847", value: currentDateISO },
+        { field: "847", value: currentDateYYYYMMDD },
         { field: "845", value: graduation },
         { field: "846", value: education_area },
         { field: "840", value: utm_campaign_val },
@@ -79,7 +80,7 @@ export default async function handler(req, res) {
       // [L20][PÓS][GGSR] Tracking Fields & Tag
       fieldValues = [
         { field: "896", value: utm_term_val },             // [L20][PÓS][GGSR] UTM Term
-        { field: "907", value: currentDateISO },            // [L20][PÓS][GGSR] UTM Data de Inscrição
+        { field: "907", value: currentDateYYYYMMDD },       // [L20][PÓS][GGSR] UTM Data de Inscrição
         { field: "898", value: graduation },                // [L20][PÓS][GGSR] UTM Possui Graduação
         { field: "899", value: education_area },            // [L20][PÓS][GGSR] UTM Área de Formação
         { field: "900", value: utm_campaign_val },          // [L20][PÓS][GGSR] UTM Campaign
