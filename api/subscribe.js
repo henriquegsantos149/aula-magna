@@ -47,10 +47,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'O email é obrigatório.' });
     }
 
-    // Obter a data atual no fuso horário de São Paulo (YYYY-MM-DD para compatibilidade com o ActiveCampaign)
+    // Obter a data atual no fuso horário de São Paulo (formato DD/MM/YYYY)
     const currentDateBR = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
-    const dateParts = currentDateBR.split('/');
-    const currentDateYYYYMMDD = dateParts.length === 3 ? `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}` : currentDateBR;
 
     let fieldValues = [];
     let tagId = "";
@@ -66,7 +64,7 @@ export default async function handler(req, res) {
     if (origin === 'iama') {
       fieldValues = [
         { field: "844", value: utm_term_val },
-        { field: "847", value: currentDateYYYYMMDD },
+        { field: "847", value: currentDateBR },
         { field: "845", value: graduation },
         { field: "846", value: education_area },
         { field: "840", value: utm_campaign_val },
@@ -77,16 +75,30 @@ export default async function handler(req, res) {
       
       tagId = "470"; // [L02][PÓS][IA.MA] Lead
     } else {
-      // [L20][PÓS][GGSR] Tracking Fields & Tag
+      // [PÓS][GGSR] Tracking Fields (L20, L19, L18) & Tag
       fieldValues = [
+        // L20
         { field: "896", value: utm_term_val },             // [L20][PÓS][GGSR] UTM Term
-        { field: "907", value: currentDateYYYYMMDD },       // [L20][PÓS][GGSR] UTM Data de Inscrição
+        { field: "907", value: currentDateBR },             // [L20][PÓS][GGSR] UTM Data de Inscrição
         { field: "898", value: graduation },                // [L20][PÓS][GGSR] UTM Possui Graduação
         { field: "899", value: education_area },            // [L20][PÓS][GGSR] UTM Área de Formação
         { field: "900", value: utm_campaign_val },          // [L20][PÓS][GGSR] UTM Campaign
         { field: "904", value: utm_source_val },            // [L20][PÓS][GGSR] UTM Source
         { field: "902", value: utm_medium_val },            // [L20][PÓS][GGSR] UTM Medium
-        { field: "903", value: utm_content_val }            // [L20][PÓS][GGSR] UTM Content
+        { field: "903", value: utm_content_val },           // [L20][PÓS][GGSR] UTM Content
+
+        // L19 Fallback
+        { field: "849", value: currentDateBR },             // [L19][PÓS][GGSR] Data de Inscrição
+        { field: "848", value: utm_term_val },
+        { field: "850", value: graduation },
+        { field: "851", value: education_area },
+        { field: "852", value: utm_campaign_val },
+        { field: "853", value: utm_source_val },
+        { field: "854", value: utm_medium_val },
+        { field: "855", value: utm_content_val },
+
+        // L18 Fallback
+        { field: "773", value: currentDateBR }              // [L18][PÓS][GGSR] Data de Inscrição
       ].filter(f => f.value && f.value !== "");
       
       tagId = "486"; // [L20][PÓS][GGSR] Lead
@@ -119,6 +131,26 @@ export default async function handler(req, res) {
 
     const syncResult = await syncResponse.json();
     const contactId = syncResult.contact.id;
+
+    // Passo 1.5: Atualizar explicitamente os campos customizados para garantir em contatos já existentes
+    await Promise.allSettled(
+      fieldValues.map(fv =>
+        fetch(`${AC_BASE_URL}/fieldValues`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Api-Token': AC_API_KEY
+          },
+          body: JSON.stringify({
+            fieldValue: {
+              contact: contactId,
+              field: fv.field,
+              value: fv.value
+            }
+          })
+        })
+      )
+    );
 
     // Passo 2: Adicionar a Tag
     const tagPayload = {
