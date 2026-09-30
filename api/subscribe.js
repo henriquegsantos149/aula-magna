@@ -75,7 +75,7 @@ export default async function handler(req, res) {
       
       tagId = "470"; // [L02][PÓS][IA.MA] Lead
     } else {
-      // [PÓS][GGSR] Tracking Fields (L20, L19, L18) & Tag
+      // [PÓS][GGSR] Tracking Fields (L20, L19, L18, Lista de Espera, Webinário, Módulo Zero, Geral) & Tag
       fieldValues = [
         // L20
         { field: "896", value: utm_term_val },             // [L20][PÓS][GGSR] UTM Term
@@ -97,8 +97,13 @@ export default async function handler(req, res) {
         { field: "854", value: utm_medium_val },
         { field: "855", value: utm_content_val },
 
-        // L18 Fallback
-        { field: "773", value: currentDateBR }              // [L18][PÓS][GGSR] Data de Inscrição
+        // Outros campos de Data GGSR e Geral
+        { field: "773", value: currentDateBR },             // [L18][PÓS][GGSR] Data de Inscrição
+        { field: "401", value: currentDateBR },             // [LISTA DE ESPERA] [POS GGSR] Data de Inscrição
+        { field: "352", value: currentDateBR },             // [WEBINARIO] [POS] [GGSR] [L1] Data de Inscrição
+        { field: "539", value: currentDateBR },             // [MÓDULO ZERO: PÓS GGSR] Data de Inscrição
+        { field: "43",  value: currentDateBR },             // Data
+        { field: "3",   value: currentDateBR }              // Inscricao mais recente
       ].filter(f => f.value && f.value !== "");
       
       tagId = "486"; // [L20][PÓS][GGSR] Lead
@@ -132,25 +137,60 @@ export default async function handler(req, res) {
     const syncResult = await syncResponse.json();
     const contactId = syncResult.contact.id;
 
-    // Passo 1.5: Atualizar explicitamente os campos customizados para garantir em contatos já existentes
-    await Promise.allSettled(
-      fieldValues.map(fv =>
-        fetch(`${AC_BASE_URL}/fieldValues`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Api-Token': AC_API_KEY
-          },
-          body: JSON.stringify({
-            fieldValue: {
-              contact: contactId,
-              field: fv.field,
-              value: fv.value
-            }
-          })
+    // Passo 1.5: Buscar os fieldValues existentes do contato e atualizar (PUT) ou criar (POST) explicitamente
+    try {
+      const existingFvRes = await fetch(`${AC_BASE_URL}/contacts/${contactId}/fieldValues`, {
+        headers: { 'Api-Token': AC_API_KEY }
+      });
+
+      let existingMap = new Map();
+      if (existingFvRes.ok) {
+        const existingData = await existingFvRes.json();
+        if (Array.isArray(existingData.fieldValues)) {
+          existingData.fieldValues.forEach(item => {
+            existingMap.set(String(item.field), String(item.id));
+          });
+        }
+      }
+
+      await Promise.allSettled(
+        fieldValues.map(fv => {
+          const fieldIdStr = String(fv.field);
+          if (existingMap.has(fieldIdStr)) {
+            const fvRecordId = existingMap.get(fieldIdStr);
+            return fetch(`${AC_BASE_URL}/fieldValues/${fvRecordId}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                'Api-Token': AC_API_KEY
+              },
+              body: JSON.stringify({
+                fieldValue: {
+                  value: fv.value
+                }
+              })
+            });
+          } else {
+            return fetch(`${AC_BASE_URL}/fieldValues`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Api-Token': AC_API_KEY
+              },
+              body: JSON.stringify({
+                fieldValue: {
+                  contact: contactId,
+                  field: fv.field,
+                  value: fv.value
+                }
+              })
+            });
+          }
         })
-      )
-    );
+      );
+    } catch (fvError) {
+      console.error("Erro ao sincronizar fieldValues no ActiveCampaign:", fvError);
+    }
 
     // Passo 2: Adicionar a Tag
     const tagPayload = {
