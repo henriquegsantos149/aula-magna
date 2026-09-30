@@ -527,9 +527,10 @@ function initFormControls() {
       },
       body: JSON.stringify(leadData)
     })
-    .then(res => {
+    .then(async res => {
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        console.warn('API subscription warning. Proceeding to VIP group.');
+        console.warn('API subscription warning:', data.error || 'Unknown warning');
       }
     })
     .catch(err => {
