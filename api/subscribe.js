@@ -47,6 +47,13 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'O email é obrigatório.' });
     }
 
+    // Função para remover acentos e caracteres especiais das buscas de título
+    const normalizeText = (str) =>
+      (str || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+
     // Obter a data atual no fuso horário de São Paulo
     const currentDateBR = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
     const dateParts = currentDateBR.split('/');
@@ -113,13 +120,15 @@ export default async function handler(req, res) {
         { field: "3",   value: currentDateYYYYMMDD }        // Inscricao mais recente
       ];
 
-      // Adicionar dinamicamente todos os campos que contêm "GGSR" e "Data" ou "Inscrição" descobertos no ActiveCampaign
+      // Adicionar dinamicamente todos os campos que contêm GGSR/POS/Aula e Data/Inscricao descobertos no ActiveCampaign
       if (acFields.length > 0) {
         acFields.forEach(field => {
-          const titleLower = (field.title || '').toLowerCase();
-          if ((titleLower.includes('ggsr') || titleLower.includes('pos')) && (titleLower.includes('data') || titleLower.includes('inscri'))) {
+          const normTitle = normalizeText(field.title);
+          if (
+            (normTitle.includes('ggsr') || normTitle.includes('pos') || normTitle.includes('aula') || normTitle.includes('l20') || normTitle.includes('l19') || normTitle.includes('l18')) &&
+            (normTitle.includes('data') || normTitle.includes('inscric'))
+          ) {
             const val = field.type === 'date' ? currentDateYYYYMMDD : currentDateBR;
-            // Se ainda não estiver na lista, adiciona
             if (!fieldValues.some(fv => String(fv.field) === String(field.id))) {
               fieldValues.push({ field: String(field.id), value: val });
             }
