@@ -129,14 +129,14 @@ export default async function handler(req, res) {
         { field: "3",   value: getFieldValueForField("3", currentDateBR) }   // Inscricao mais recente
       ];
 
-      // Adicionar dinamicamente todos os campos que contêm GGSR/POS/Aula e Data/Inscricao descobertos no ActiveCampaign
+      // Adicionar dinamicamente todos os campos que contêm GGSR/POS/L20/Aula e Data/Inscricao descobertos no ActiveCampaign
       if (acFields.length > 0) {
         acFields.forEach(field => {
           const normTitle = normalizeText(field.title);
-          if (
-            (normTitle.includes('ggsr') || normTitle.includes('pos') || normTitle.includes('aula') || normTitle.includes('l20') || normTitle.includes('l19') || normTitle.includes('l18')) &&
-            (normTitle.includes('data') || normTitle.includes('inscric'))
-          ) {
+          const isL20Date = normTitle.includes('l20') && (normTitle.includes('data') || normTitle.includes('inscric'));
+          const isGgsrDate = (normTitle.includes('ggsr') || normTitle.includes('pos') || normTitle.includes('aula') || normTitle.includes('l19') || normTitle.includes('l18')) && (normTitle.includes('data') || normTitle.includes('inscric'));
+
+          if (isL20Date || isGgsrDate) {
             const val = field.type === 'date' ? currentDateYYYYMMDD : currentDateBR;
             const existingIndex = fieldValues.findIndex(fv => String(fv.field) === String(field.id));
             if (existingIndex >= 0) {
