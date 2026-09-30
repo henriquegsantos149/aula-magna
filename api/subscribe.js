@@ -47,13 +47,24 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'O email é obrigatório.' });
     }
 
-    // Obter a data atual no fuso horário de São Paulo (YYYY-MM-DD para campos do tipo Data e DD/MM/YYYY para texto)
+    // Obter a data atual no fuso horário de São Paulo
     const currentDateBR = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
     const dateParts = currentDateBR.split('/');
     const currentDateYYYYMMDD = dateParts.length === 3 ? `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}` : currentDateBR;
 
-    let fieldValues = [];
-    let tagId = "";
+    // Passo 0: Buscar a lista de campos customizados dinamicamente do ActiveCampaign
+    let acFields = [];
+    try {
+      const fieldsRes = await fetch(`${AC_BASE_URL}/fields?limit=500`, {
+        headers: { 'Api-Token': AC_API_KEY }
+      });
+      if (fieldsRes.ok) {
+        const fieldsData = await fieldsRes.json();
+        acFields = fieldsData.fields || [];
+      }
+    } catch (err) {
+      console.warn("Aviso: Falha ao carregar campos customizados do ActiveCampaign dinamicamente:", err);
+    }
 
     // Normalização das UTMs recebidas
     const utm_term_val = utm_term || data.l20psggsr_utm_term || data.l19psggsr_utm_term || '';
@@ -61,6 +72,9 @@ export default async function handler(req, res) {
     const utm_source_val = utm_source || data.l20psggsr_utm_source || data.l19psggsr_utm_source || '';
     const utm_medium_val = utm_medium || data.l20psggsr_utm_medium || data.l19psggsr_utm_medium || '';
     const utm_content_val = utm_content || data.l20psggsr_utm_content || data.l19psggsr_utm_content || '';
+
+    let fieldValues = [];
+    let tagId = "";
 
     // Configuração baseada na origem da requisição
     if (origin === 'iama') {
@@ -77,11 +91,11 @@ export default async function handler(req, res) {
       
       tagId = "470"; // [L02][PÓS][IA.MA] Lead
     } else {
-      // [PÓS][GGSR] Tracking Fields (L20, L19, L18, Lista de Espera, Webinário, Módulo Zero, Geral) & Tag
+      // Montagem padrão para GGSR
       fieldValues = [
-        // L20 - [L20][PÓS][GGSR] UTM Data de Inscriçãoo
+        // L20
         { field: "896", value: utm_term_val },             // [L20][PÓS][GGSR] UTM Term
-        { field: "907", value: currentDateYYYYMMDD },       // [L20][PÓS][GGSR] UTM Data de Inscriçãoo (YYYY-MM-DD)
+        { field: "907", value: currentDateYYYYMMDD },       // [L20][PÓS][GGSR] UTM Data de Inscrição (ISO Date)
         { field: "898", value: graduation },                // [L20][PÓS][GGSR] UTM Possui Graduação
         { field: "899", value: education_area },            // [L20][PÓS][GGSR] UTM Área de Formação
         { field: "900", value: utm_campaign_val },          // [L20][PÓS][GGSR] UTM Campaign
@@ -89,25 +103,31 @@ export default async function handler(req, res) {
         { field: "902", value: utm_medium_val },            // [L20][PÓS][GGSR] UTM Medium
         { field: "903", value: utm_content_val },           // [L20][PÓS][GGSR] UTM Content
 
-        // L19 Fallback
+        // Fallbacks adicionais de Data para GGSR
         { field: "849", value: currentDateYYYYMMDD },       // [L19][PÓS][GGSR] Data de Inscrição
-        { field: "848", value: utm_term_val },
-        { field: "850", value: graduation },
-        { field: "851", value: education_area },
-        { field: "852", value: utm_campaign_val },
-        { field: "853", value: utm_source_val },
-        { field: "854", value: utm_medium_val },
-        { field: "855", value: utm_content_val },
-
-        // Outros campos de Data GGSR e Geral (enviando YYYY-MM-DD para Date e DD/MM/YYYY para texto)
         { field: "773", value: currentDateYYYYMMDD },       // [L18][PÓS][GGSR] Data de Inscrição
         { field: "401", value: currentDateYYYYMMDD },       // [LISTA DE ESPERA] [POS GGSR] Data de Inscrição
         { field: "352", value: currentDateYYYYMMDD },       // [WEBINARIO] [POS] [GGSR] [L1] Data de Inscrição
         { field: "539", value: currentDateYYYYMMDD },       // [MÓDULO ZERO: PÓS GGSR] Data de Inscrição
         { field: "43",  value: currentDateYYYYMMDD },       // Data
         { field: "3",   value: currentDateYYYYMMDD }        // Inscricao mais recente
-      ].filter(f => f.value && f.value !== "");
-      
+      ];
+
+      // Adicionar dinamicamente todos os campos que contêm "GGSR" e "Data" ou "Inscrição" descobertos no ActiveCampaign
+      if (acFields.length > 0) {
+        acFields.forEach(field => {
+          const titleLower = (field.title || '').toLowerCase();
+          if ((titleLower.includes('ggsr') || titleLower.includes('pos')) && (titleLower.includes('data') || titleLower.includes('inscri'))) {
+            const val = field.type === 'date' ? currentDateYYYYMMDD : currentDateBR;
+            // Se ainda não estiver na lista, adiciona
+            if (!fieldValues.some(fv => String(fv.field) === String(field.id))) {
+              fieldValues.push({ field: String(field.id), value: val });
+            }
+          }
+        });
+      }
+
+      fieldValues = fieldValues.filter(f => f.value && f.value !== "");
       tagId = "486"; // [L20][PÓS][GGSR] Lead
     }
 
@@ -168,6 +188,8 @@ export default async function handler(req, res) {
               },
               body: JSON.stringify({
                 fieldValue: {
+                  contact: contactId,
+                  field: fv.field,
                   value: fv.value
                 }
               })
