@@ -60,14 +60,19 @@ export default async function handler(req, res) {
     const currentDateYYYYMMDD = dateParts.length === 3 ? `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}` : currentDateBR;
 
     // Passo 0: Buscar a lista de campos customizados dinamicamente do ActiveCampaign
+    // A conta tem mais de 500 campos (os L20 têm IDs > 900), então é preciso paginar
     let acFields = [];
     try {
-      const fieldsRes = await fetch(`${AC_BASE_URL}/fields?limit=500`, {
-        headers: { 'Api-Token': AC_API_KEY }
-      });
-      if (fieldsRes.ok) {
+      const pageSize = 100;
+      for (let offset = 0; offset < 5000; offset += pageSize) {
+        const fieldsRes = await fetch(`${AC_BASE_URL}/fields?limit=${pageSize}&offset=${offset}`, {
+          headers: { 'Api-Token': AC_API_KEY }
+        });
+        if (!fieldsRes.ok) break;
         const fieldsData = await fieldsRes.json();
-        acFields = fieldsData.fields || [];
+        const page = fieldsData.fields || [];
+        acFields = acFields.concat(page);
+        if (page.length < pageSize) break;
       }
     } catch (err) {
       console.warn("Aviso: Falha ao carregar campos customizados do ActiveCampaign dinamicamente:", err);
@@ -77,7 +82,7 @@ export default async function handler(req, res) {
     const getFieldValueForField = (fieldId, fallbackVal) => {
       const found = acFields.find(f => String(f.id) === String(fieldId));
       if (found) {
-        return found.type === 'date' ? currentDateYYYYMMDD : currentDateBR;
+        return (found.type === 'date' || found.type === 'datetime') ? currentDateYYYYMMDD : currentDateBR;
       }
       return fallbackVal;
     };
@@ -133,11 +138,11 @@ export default async function handler(req, res) {
       if (acFields.length > 0) {
         acFields.forEach(field => {
           const normTitle = normalizeText(field.title);
-          const isL20Date = normTitle.includes('l20') && (normTitle.includes('data') || normTitle.includes('inscric'));
-          const isGgsrDate = (normTitle.includes('ggsr') || normTitle.includes('pos') || normTitle.includes('aula') || normTitle.includes('l19') || normTitle.includes('l18')) && (normTitle.includes('data') || normTitle.includes('inscric'));
+          // Apenas campos L20 do GGSR (evita gravar data em campos de outros cursos, ex.: [POS] [GEOPROCESSAMENTO])
+          const isL20GgsrDate = normTitle.includes('l20') && normTitle.includes('ggsr') && (normTitle.includes('data') || normTitle.includes('inscric'));
 
-          if (isL20Date || isGgsrDate) {
-            const val = field.type === 'date' ? currentDateYYYYMMDD : currentDateBR;
+          if (isL20GgsrDate) {
+            const val = (field.type === 'date' || field.type === 'datetime') ? currentDateYYYYMMDD : currentDateBR;
             const existingIndex = fieldValues.findIndex(fv => String(fv.field) === String(field.id));
             if (existingIndex >= 0) {
               fieldValues[existingIndex].value = val;
@@ -196,7 +201,7 @@ export default async function handler(req, res) {
         }
       }
 
-      await Promise.allSettled(
+      const fvResults = await Promise.allSettled(
         fieldValues.map(fv => {
           const fieldIdStr = String(fv.field);
           if (existingMap.has(fieldIdStr)) {
@@ -233,6 +238,17 @@ export default async function handler(req, res) {
           }
         })
       );
+
+      // Logar campos rejeitados pelo ActiveCampaign (ex.: data em formato inválido)
+      for (let i = 0; i < fvResults.length; i++) {
+        const r = fvResults[i];
+        if (r.status === 'rejected') {
+          console.error(`Falha de rede no campo ${fieldValues[i].field}:`, r.reason);
+        } else if (!r.value.ok) {
+          const errText = await r.value.text().catch(() => '');
+          console.error(`ActiveCampaign rejeitou o campo ${fieldValues[i].field} (valor "${fieldValues[i].value}"):`, errText);
+        }
+      }
     } catch (fvError) {
       console.error("Erro ao sincronizar fieldValues no ActiveCampaign:", fvError);
     }
