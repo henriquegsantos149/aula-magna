@@ -58,6 +58,9 @@ export default async function handler(req, res) {
     const currentDateBR = new Date().toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' });
     const dateParts = currentDateBR.split('/');
     const currentDateYYYYMMDD = dateParts.length === 3 ? `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}` : currentDateBR;
+    // Data e hora no formato aceito pelos campos datetime do ActiveCampaign (São Paulo não tem horário de verão: -03:00)
+    const currentTimeBR = new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour12: false });
+    const currentDateTimeISO = `${currentDateYYYYMMDD}T${currentTimeBR}-03:00`;
 
     // Passo 0: Buscar a lista de campos customizados dinamicamente do ActiveCampaign
     // A conta tem mais de 500 campos (os L20 têm IDs > 900), então é preciso paginar
@@ -79,9 +82,10 @@ export default async function handler(req, res) {
     }
 
     // Função para obter o valor formatado correto com base no tipo real do campo no ActiveCampaign
-    const getFieldValueForField = (fieldId, fallbackVal) => {
+    const getFieldValueForField = (fieldId, fallbackVal, withTime = false) => {
       const found = acFields.find(f => String(f.id) === String(fieldId));
       if (found) {
+        if (withTime && found.type === 'datetime') return currentDateTimeISO;
         return (found.type === 'date' || found.type === 'datetime') ? currentDateYYYYMMDD : currentDateBR;
       }
       return fallbackVal;
@@ -116,7 +120,7 @@ export default async function handler(req, res) {
       fieldValues = [
         // L20
         { field: "896", value: utm_term_val },             // [L20][PÓS][GGSR] UTM Term
-        { field: "907", value: getFieldValueForField("907", currentDateBR) }, // [L20][PÓS][GGSR] UTM Data de Inscrição
+        { field: "907", value: getFieldValueForField("907", currentDateBR, true) }, // [L20][PÓS][GGSR] UTM Data de Inscrição
         { field: "898", value: graduation },                // [L20][PÓS][GGSR] UTM Possui Graduação
         { field: "899", value: education_area },            // [L20][PÓS][GGSR] UTM Área de Formação
         { field: "900", value: utm_campaign_val },          // [L20][PÓS][GGSR] UTM Campaign
@@ -142,7 +146,7 @@ export default async function handler(req, res) {
           const isL20GgsrDate = normTitle.includes('l20') && normTitle.includes('ggsr') && (normTitle.includes('data') || normTitle.includes('inscric'));
 
           if (isL20GgsrDate) {
-            const val = (field.type === 'date' || field.type === 'datetime') ? currentDateYYYYMMDD : currentDateBR;
+            const val = field.type === 'datetime' ? currentDateTimeISO : field.type === 'date' ? currentDateYYYYMMDD : currentDateBR;
             const existingIndex = fieldValues.findIndex(fv => String(fv.field) === String(field.id));
             if (existingIndex >= 0) {
               fieldValues[existingIndex].value = val;
