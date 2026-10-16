@@ -1,4 +1,45 @@
+// Aguarda a entrega durante a requisição; não deixa trabalho solto após a resposta.
+async function sendIamaWebhook(payload) {
+  const controller = new AbortController();
+  const startedAt = Date.now();
+  const timeout = setTimeout(() => controller.abort(), 7000);
+  try {
+    const response = await fetch('https://services.leadconnectorhq.com/hooks/CjEOBshy5Npf1Ri3eL4n/webhook-trigger/f0c49ef6-827f-4f91-8f28-204be8d7209b', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      signal: controller.signal,
+      body: JSON.stringify(payload)
+    });
+    const result = {
+      integration: 'iama-leadconnector',
+      outcome: response.ok ? 'accepted' : 'http_error',
+      status: response.status,
+      elapsed_ms: Date.now() - startedAt
+    };
+    if (response.ok) console.info('Webhook IAMA:', result);
+    else console.warn('Webhook IAMA:', result);
+    return result;
+  } catch (error) {
+    const result = {
+      integration: 'iama-leadconnector',
+      outcome: controller.signal.aborted ? 'timeout' : 'network_error',
+      error: error.name,
+      elapsed_ms: Date.now() - startedAt
+    };
+    console.warn('Webhook IAMA:', result);
+    return result;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export default async function handler(req, res) {
+  let webhookDelivery;
+  const respond = async (status, body) => {
+    // Também aguardar em retornos antecipados/erros do ActiveCampaign.
+    if (webhookDelivery) await webhookDelivery;
+    return res.status(status).json(body);
+  };
   // Configurar CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*'); 
@@ -13,7 +54,7 @@ export default async function handler(req, res) {
 
   // Permitir apenas requisições POST
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method Not Allowed' });
+    return await respond(405, { error: 'Method Not Allowed' });
   }
 
   try {
@@ -23,9 +64,9 @@ export default async function handler(req, res) {
     const AC_API_KEY = process.env.ACTIVE_API_KEY;
     const AC_BASE_URL = 'https://ambientalpro.api-us1.com/api/3';
     
-    if (!AC_API_KEY) {
+    if (!AC_API_KEY && data.origin !== 'iama') {
       console.error("Erro: Variável de ambiente ACTIVE_API_KEY não configurada.");
-      return res.status(500).json({ error: 'Erro de configuração interna do servidor.' });
+      return await respond(500, { error: 'Erro de configuração interna do servidor.' });
     }
 
     // Extrair os dados recebidos do front-end
@@ -44,14 +85,14 @@ export default async function handler(req, res) {
     } = data;
 
     if (!email) {
-      return res.status(400).json({ error: 'O email é obrigatório.' });
+      return await respond(400, { error: 'O email é obrigatório.' });
     }
 
     if (origin === 'iama') {
       const limits = [[name, 100], [email, 254], [education_area, 120], [whatsapp, 16]];
       if (limits.some(([value, limit]) => typeof value !== 'string' || value.length > limit)
         || whatsapp.replace(/\D/g, '').length > 15) {
-        return res.status(400).json({ error: 'Um dos campos excede o limite de caracteres permitido.' });
+        return await respond(400, { error: 'Um dos campos excede o limite de caracteres permitido.' });
       }
     }
 
@@ -69,6 +110,37 @@ export default async function handler(req, res) {
     // Data e hora no formato aceito pelos campos datetime do ActiveCampaign (São Paulo não tem horário de verão: -03:00)
     const currentTimeBR = new Date().toLocaleTimeString('pt-BR', { timeZone: 'America/Sao_Paulo', hour12: false });
     const currentDateTimeISO = `${currentDateYYYYMMDD}T${currentTimeBR}-03:00`;
+
+    // Normalização das UTMs recebidas
+    const utm_term_val = utm_term || data.l20psggsr_utm_term || data.l19psggsr_utm_term || '';
+    const utm_campaign_val = utm_campaign || data.l20psggsr_utm_campaign || data.l19psggsr_utm_campaign || '';
+    const utm_source_val = utm_source || data.l20psggsr_utm_source || data.l19psggsr_utm_source || '';
+    const utm_medium_val = utm_medium || data.l20psggsr_utm_medium || data.l19psggsr_utm_medium || '';
+    const utm_content_val = utm_content || data.l20psggsr_utm_content || data.l19psggsr_utm_content || '';
+
+    // Iniciar antes de qualquer chamada ou validação de configuração do ActiveCampaign.
+    if (origin === 'iama') {
+      webhookDelivery = sendIamaWebhook({
+        origin,
+        name,
+        email,
+        phone: whatsapp,
+        whatsapp,
+        graduation,
+        education_area,
+        utm_content: utm_content_val,
+        utm_term: utm_term_val,
+        utm_campaign: utm_campaign_val,
+        utm_source: utm_source_val,
+        utm_medium: utm_medium_val,
+        registered_at: currentDateTimeISO,
+        tag: '[AM][BF][POS][IAMA] Lead'
+      });
+      if (!AC_API_KEY) {
+        console.error('Erro: Variável de ambiente ACTIVE_API_KEY não configurada.');
+        return await respond(500, { error: 'Erro de configuração interna do servidor.' });
+      }
+    }
 
     // Passo 0: Buscar a lista de campos customizados dinamicamente do ActiveCampaign
     // A conta tem mais de 500 campos (os L20 têm IDs > 900), então é preciso paginar
@@ -99,13 +171,6 @@ export default async function handler(req, res) {
       return fallbackVal;
     };
 
-    // Normalização das UTMs recebidas
-    const utm_term_val = utm_term || data.l20psggsr_utm_term || data.l19psggsr_utm_term || '';
-    const utm_campaign_val = utm_campaign || data.l20psggsr_utm_campaign || data.l19psggsr_utm_campaign || '';
-    const utm_source_val = utm_source || data.l20psggsr_utm_source || data.l19psggsr_utm_source || '';
-    const utm_medium_val = utm_medium || data.l20psggsr_utm_medium || data.l19psggsr_utm_medium || '';
-    const utm_content_val = utm_content || data.l20psggsr_utm_content || data.l19psggsr_utm_content || '';
-
     let fieldValues = [];
     let tagId = "";
 
@@ -131,7 +196,7 @@ export default async function handler(req, res) {
       if (resolvedFields.some(item => !item.field)) {
         console.error('Campos da campanha IAMA ausentes ou duplicados:',
           resolvedFields.filter(item => !item.field).map(item => item.title));
-        return res.status(503).json({ error: 'Configuração da campanha indisponível. Tente novamente em instantes.' });
+        return await respond(503, { error: 'Configuração da campanha indisponível. Tente novamente em instantes.' });
       }
 
       // Resolver a tag exata, incluindo contas com mais de uma página de tags.
@@ -149,7 +214,7 @@ export default async function handler(req, res) {
         if (page.length < 100) break;
       }
       if (campaignTags.length !== 1) {
-        return res.status(503).json({ error: 'Tag da campanha indisponível. Tente novamente em instantes.' });
+        return await respond(503, { error: 'Tag da campanha indisponível. Tente novamente em instantes.' });
       }
       tagId = String(campaignTags[0].id);
       fieldValues = resolvedFields.map(({ field, value }) => ({
@@ -224,7 +289,7 @@ export default async function handler(req, res) {
     if (!syncResponse.ok) {
       const errorData = await syncResponse.text();
       console.error("Erro da API do ActiveCampaign (Sync):", errorData);
-      return res.status(syncResponse.status).json({ error: 'Falha ao sincronizar o contato.' });
+      return await respond(syncResponse.status, { error: 'Falha ao sincronizar o contato.' });
     }
 
     const syncResult = await syncResponse.json();
@@ -323,47 +388,11 @@ export default async function handler(req, res) {
       }
     }
 
-    // Envio adicional da IAMA: falhas não alteram a inscrição nem as UTMs do ActiveCampaign.
-    if (origin === 'iama') {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 2500);
-      try {
-        const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/CjEOBshy5Npf1Ri3eL4n/webhook-trigger/f0c49ef6-827f-4f91-8f28-204be8d7209b', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          signal: controller.signal,
-          body: JSON.stringify({
-            origin,
-            name,
-            email,
-            phone: whatsapp,
-            whatsapp,
-            graduation,
-            education_area,
-            utm_content: utm_content_val,
-            utm_term: utm_term_val,
-            utm_campaign: utm_campaign_val,
-            utm_source: utm_source_val,
-            utm_medium: utm_medium_val,
-            registered_at: currentDateTimeISO,
-            tag: '[AM][BF][POS][IAMA] Lead'
-          })
-        });
-        if (!webhookResponse.ok) {
-          console.warn('Webhook IAMA retornou status:', webhookResponse.status);
-        }
-      } catch (error) {
-        console.warn('Webhook IAMA não entregue:', error.name);
-      } finally {
-        clearTimeout(timeout);
-      }
-    }
-
     // Retorna sucesso para o front-end
-    return res.status(200).json({ success: true, message: 'Inscrição registrada com sucesso!' });
+    return await respond(200, { success: true, message: 'Inscrição registrada com sucesso!' });
 
   } catch (error) {
     console.error("Erro interno não tratado no Serverless Function:", error);
-    return res.status(500).json({ error: 'Erro interno no processamento da requisição.' });
+    return await respond(500, { error: 'Erro interno no processamento da requisição.' });
   }
 }
