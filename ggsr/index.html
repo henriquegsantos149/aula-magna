@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta http-equiv="refresh" content="0; url=https://ambientalpro.com.br" />
-  <script>window.location.replace('https://ambientalpro.com.br');</script>
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -57,11 +55,12 @@
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./black-friday.css">
   
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
-<body>
+<body class="black-friday-theme">
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTZ9NFFN"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
@@ -113,9 +112,13 @@
     <section id="hero" class="hero-section">
       <div class="container hero-container">
         <div class="hero-content reveal">
+          <div class="bf-campaign" aria-label="Black Friday Ambiental Pro">
+            <div class="bf-campaign-name"><span>BLACK</span> FRIDAY</div>
+            <span class="bf-campaign-brand">AMBIENTAL PRO</span>
+          </div>
           <div class="badge">
             <span class="badge-dot"></span>
-            <span class="badge-text">Aula Magna Gratuita • 07/10 às 20h</span>
+            <span class="badge-text">Gratuita • 17/11/2026 às&nbsp;20h (Brasília)</span>
           </div>
           <h1 class="hero-title">
             Aula Magna da Pós-Graduação em <span class="gradient-text">GGSR</span>
@@ -143,7 +146,7 @@
             <div class="avatars-group">
               <span class="avatar-placeholder">80k+</span>
             </div>
-            <p class="social-proof-text" style="white-space: nowrap; font-size: 0.85rem;">Junte-se a mais de <strong>80.000 profissionais</strong> capacitados pela Ambiental Pro.</p>
+            <p class="social-proof-text">Junte-se a mais de <strong>80.000 profissionais</strong> capacitados pela Ambiental Pro.</p>
           </div>
         </div>
 
@@ -152,7 +155,7 @@
             <div class="card-glow-top"></div>
             <div class="text-center" style="margin-bottom: 20px;">
               <h3 class="card-title">Inscreva-se Grátis</h3>
-              <p class="card-subtitle">Receba o link de transmissão da Aula Magna e a oferta exclusiva do grupo VIP.</p>
+              <p class="card-subtitle">Receba o link da Aula Magna e acompanhe a oferta exclusiva de Black Friday no grupo VIP.</p>
             </div>
             
             <form id="enrollment-form" class="registration-form">
@@ -184,6 +187,31 @@
                 Quero Participar Gratuitamente <i data-lucide="arrow-right"></i>
               </button>
             </form>
+            <div class="countdown-container" id="countdown-container" style="text-align: center; margin-top: 20px;">
+              <p class="countdown-label" style="margin-bottom: 8px;">A aula começa em:</p>
+              <div class="countdown-timer" id="countdown-timer" style="justify-content: center;">
+                <div class="time-box">
+                  <span class="time-val" id="cd-days">00</span>
+                  <span class="time-unit">Dias</span>
+                </div>
+                <span class="time-sep">:</span>
+                <div class="time-box">
+                  <span class="time-val" id="cd-hours">00</span>
+                  <span class="time-unit">Horas</span>
+                </div>
+                <span class="time-sep">:</span>
+                <div class="time-box">
+                  <span class="time-val" id="cd-minutes">00</span>
+                  <span class="time-unit">Min</span>
+                </div>
+                <span class="time-sep">:</span>
+                <div class="time-box">
+                  <span class="time-val" id="cd-seconds">00</span>
+                  <span class="time-unit">Seg</span>
+                </div>
+              </div>
+            </div>
+
             <p class="security-text">
               <i data-lucide="shield-alert"></i> Seus dados estão 100% seguros sob a LGPD.
             </p>
