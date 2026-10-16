@@ -426,12 +426,60 @@ function initFormControls() {
     return { isValid: false, message: 'Número de telefone inválido para o país selecionado.' };
   };
 
-  // Clean input
-  phoneInput.addEventListener('input', (e) => {
-    let value = e.target.value.replace(/[^\d+\s-]/g, ''); 
-    e.target.value = value;
+  // Máscara brasileira e limite internacional de 15 dígitos (E.164).
+  const formatPhone = () => {
+    const raw = phoneInput.value;
+    const caret = phoneInput.selectionStart;
+    let digitsBeforeCaret = raw.slice(0, caret ?? raw.length).replace(/\D/g, '').length;
+    const isBrazil = iti.getSelectedCountryData().iso2 === 'br';
+    let digits = raw.replace(/\D/g, '');
+    if (isBrazil) {
+      if (raw.trim().startsWith('+55')) {
+        digits = digits.slice(2);
+        digitsBeforeCaret = Math.max(0, digitsBeforeCaret - 2);
+      }
+      digits = digits.slice(0, 11);
+      const local = digits.slice(2);
+      const split = local.length > 8 ? 5 : 4;
+      phoneInput.value = digits ? `(${digits.slice(0, 2)}${digits.length >= 2 ? ') ' : ''}` : '';
+      phoneInput.value += local.slice(0, split) + (local.length > split ? '-' + local.slice(split) : '');
+    } else {
+      phoneInput.value = (raw.trim().startsWith('+') ? '+' : '') + digits.slice(0, 15);
+    }
+    if (document.activeElement === phoneInput && caret !== null) {
+      let position = 0;
+      let count = 0;
+      while (position < phoneInput.value.length && count < digitsBeforeCaret) {
+        if (/\d/.test(phoneInput.value[position])) count++;
+        position++;
+      }
+      if (caret === raw.length) position = phoneInput.value.length;
+      phoneInput.setSelectionRange(position, position);
+    }
     phoneInput.setCustomValidity('');
+  };
+
+  phoneInput.addEventListener('input', formatPhone);
+  phoneInput.addEventListener('paste', (event) => {
+    const text = event.clipboardData?.getData('text');
+    if (!text) return;
+    event.preventDefault();
+    const start = phoneInput.selectionStart ?? 0;
+    const end = phoneInput.selectionEnd ?? phoneInput.value.length;
+    phoneInput.value = phoneInput.value.slice(0, start) + text + phoneInput.value.slice(end);
+    formatPhone();
   });
+  phoneInput.addEventListener('countrychange', () => {
+    phoneInput.maxLength = 16;
+    formatPhone();
+  });
+
+  // Normalizar espaços sem mudar a grafia dos nomes ou da formação.
+  for (const id of ['user-name', 'user-education-area', 'user-email']) {
+    document.getElementById(id)?.addEventListener('blur', (event) => {
+      event.target.value = event.target.value.trim().replace(/\s+/g, ' ');
+    });
+  }
 
   // Validate on blur (quietly, without reporting)
   phoneInput.addEventListener('blur', () => {

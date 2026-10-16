@@ -1,20 +1,23 @@
 /* Campanha NOV26: aplicação exclusiva à página de Aula Magna. */
 .black-friday-theme {
-  --color-bg-deep: #050505;
-  --color-bg-dark: #0b0b0b;
-  --color-bg-card: rgba(19, 19, 19, 0.94);
+  --color-bg-deep: #090d0e;
+  --color-bg-dark: #0d1314;
+  --color-bg-card: rgba(15, 22, 23, 0.96);
   --bf-spectrum: linear-gradient(110deg, #10b6c7 0%, #8ee322 33%, #f2cf00 57%, #ff7538 78%, #ed0068 100%);
-  background: #050505;
+  background: var(--color-bg-deep);
 }
 
 .black-friday-theme .site-header,
 .black-friday-theme .site-header.scrolled {
-  background: rgba(5, 5, 5, 0.94);
+  background: rgba(9, 13, 14, 0.96);
 }
 
 .black-friday-theme .hero-section {
-  background: radial-gradient(ellipse at 95% 15%, rgba(237, 0, 104, 0.09), transparent 45%),
-    radial-gradient(ellipse at 5% 85%, rgba(142, 227, 34, 0.08), transparent 45%), #050505;
+  background:
+    radial-gradient(ellipse at 85% 25%, rgba(16, 182, 199, 0.06), transparent 55%),
+    radial-gradient(ellipse at 5% 75%, rgba(142, 227, 34, 0.045), transparent 55%),
+    radial-gradient(ellipse at 95% 95%, rgba(237, 0, 104, 0.025), transparent 40%),
+    linear-gradient(145deg, #0e1516, #090d0e 65%, #0c1315);
   overflow: hidden;
 }
 
@@ -91,7 +94,7 @@
 
 .black-friday-theme .registration-card {
   border: 1px solid transparent;
-  background: linear-gradient(#111, #111) padding-box, var(--bf-spectrum) border-box;
+  background: linear-gradient(#11191a, #0d1314) padding-box, var(--bf-spectrum) border-box;
   box-shadow: 0 20px 65px rgba(0, 0, 0, 0.45);
 }
 

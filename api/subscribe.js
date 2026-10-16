@@ -47,6 +47,14 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'O email é obrigatório.' });
     }
 
+    if (origin === 'iama') {
+      const limits = [[name, 100], [email, 254], [education_area, 120], [whatsapp, 16]];
+      if (limits.some(([value, limit]) => typeof value !== 'string' || value.length > limit)
+        || whatsapp.replace(/\D/g, '').length > 15) {
+        return res.status(400).json({ error: 'Um dos campos excede o limite de caracteres permitido.' });
+      }
+    }
+
     // Função para remover acentos e caracteres especiais das buscas de título
     const normalizeText = (str) =>
       (str || '')
