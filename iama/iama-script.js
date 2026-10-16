@@ -1,3 +1,9 @@
+import { captureAttribution, attributionUrl } from './campaign-attribution.js';
+
+let campaignStorage;
+try { campaignStorage = window.sessionStorage; } catch {}
+const entryAttribution = captureAttribution(window.location.search, campaignStorage);
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof lucide !== 'undefined') {
@@ -511,9 +517,8 @@ function initFormControls() {
     submitBtn.innerHTML = '<i data-lucide="loader" class="animate-spin"></i> Registrando sua vaga...';
     if (typeof lucide !== 'undefined') lucide.createIcons();
 
-    const campaignParams = new Map(
-      [...new URLSearchParams(window.location.search)].map(([key, value]) => [key.toLowerCase(), value])
-    );
+    const attribution = captureAttribution(window.location.search, campaignStorage);
+    const campaign = Object.values(attribution).some(Boolean) ? attribution : entryAttribution;
 
     const payload = {
       origin: 'iama',
@@ -522,11 +527,7 @@ function initFormControls() {
       whatsapp: iti.getNumber(),
       graduation: gradSelect.value,
       education_area: areaInput ? areaInput.value : '',
-      utm_content: campaignParams.get('utm_content') || '',
-      utm_term: campaignParams.get('utm_term') || '',
-      utm_campaign: campaignParams.get('utm_campaign') || '',
-      utm_source: campaignParams.get('utm_source') || '',
-      utm_medium: campaignParams.get('utm_medium') || ''
+      ...campaign
     };
 
     // Enviar para a API serverless
@@ -540,7 +541,7 @@ function initFormControls() {
     .then(async response => {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'Erro na inscrição');
-      window.location.href = 'https://tally.so/r/D4EXMN';
+      window.location.href = attributionUrl('https://tally.so/r/D4EXMN', campaign);
     })
     .catch(error => {
       console.error('Erro ao enviar formulário:', error);
