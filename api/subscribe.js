@@ -1,3 +1,10 @@
+// Cache em memória para evitar requisições repetidas lentas ao ActiveCampaign na Vercel
+let cachedAcFields = null;
+let cachedAcFieldsTime = 0;
+let cachedAcTags = null;
+let cachedAcTagsTime = 0;
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutos
+
 // Aguarda a entrega durante a requisição; não deixa trabalho solto após a resposta.
 async function sendIamaWebhook(payload) {
   const controller = new AbortController();
@@ -120,9 +127,17 @@ export default async function handler(req, res) {
 
     // Iniciar antes de qualquer chamada ou validação de configuração do ActiveCampaign.
     if (origin === 'iama') {
+      const nameParts = (name || '').trim().split(/\s+/);
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(' ') || '';
+
       webhookDelivery = sendIamaWebhook({
         origin,
         name,
+        firstName,
+        lastName,
+        first_name: firstName,
+        last_name: lastName,
         email,
         phone: whatsapp,
         whatsapp,
@@ -134,7 +149,8 @@ export default async function handler(req, res) {
         utm_source: utm_source_val,
         utm_medium: utm_medium_val,
         registered_at: currentDateTimeISO,
-        tag: '[AM][BF][POS][IAMA] Lead'
+        tag: '[AM][BF][POS][IAMA] Lead',
+        tags: ['[AM][BF][POS][IAMA] Lead']
       });
       if (!AC_API_KEY) {
         console.error('Erro: Variável de ambiente ACTIVE_API_KEY não configurada.');
@@ -142,23 +158,31 @@ export default async function handler(req, res) {
       }
     }
 
-    // Passo 0: Buscar a lista de campos customizados dinamicamente do ActiveCampaign
-    // A conta tem mais de 500 campos (os L20 têm IDs > 900), então é preciso paginar
+    // Passo 0: Buscar a lista de campos customizados dinamicamente do ActiveCampaign (com cache)
     let acFields = [];
-    try {
-      const pageSize = 100;
-      for (let offset = 0; offset < 5000; offset += pageSize) {
-        const fieldsRes = await fetch(`${AC_BASE_URL}/fields?limit=${pageSize}&offset=${offset}`, {
-          headers: { 'Api-Token': AC_API_KEY }
-        });
-        if (!fieldsRes.ok) break;
-        const fieldsData = await fieldsRes.json();
-        const page = fieldsData.fields || [];
-        acFields = acFields.concat(page);
-        if (page.length < pageSize) break;
+    const now = Date.now();
+    if (cachedAcFields && (now - cachedAcFieldsTime < CACHE_TTL_MS)) {
+      acFields = cachedAcFields;
+    } else {
+      try {
+        const pageSize = 100;
+        for (let offset = 0; offset < 5000; offset += pageSize) {
+          const fieldsRes = await fetch(`${AC_BASE_URL}/fields?limit=${pageSize}&offset=${offset}`, {
+            headers: { 'Api-Token': AC_API_KEY }
+          });
+          if (!fieldsRes.ok) break;
+          const fieldsData = await fieldsRes.json();
+          const page = fieldsData.fields || [];
+          acFields = acFields.concat(page);
+          if (page.length < pageSize) break;
+        }
+        if (acFields.length > 0) {
+          cachedAcFields = acFields;
+          cachedAcFieldsTime = now;
+        }
+      } catch (err) {
+        console.warn("Aviso: Falha ao carregar campos customizados do ActiveCampaign dinamicamente:", err);
       }
-    } catch (err) {
-      console.warn("Aviso: Falha ao carregar campos customizados do ActiveCampaign dinamicamente:", err);
     }
 
     // Função para obter o valor formatado correto com base no tipo real do campo no ActiveCampaign
@@ -194,26 +218,47 @@ export default async function handler(req, res) {
         return { title, value, field: matches.length === 1 ? matches[0] : null };
       });
       if (resolvedFields.some(item => !item.field)) {
-        console.error('Campos da campanha IAMA ausentes ou duplicados:',
+        console.warn('Campos da campanha IAMA ausentes ou duplicados no ActiveCampaign:',
           resolvedFields.filter(item => !item.field).map(item => item.title));
+        // Se o webhook foi entregue com sucesso, não bloqueia o usuário com 503
+        const webhookResult = await webhookDelivery;
+        if (webhookResult && webhookResult.outcome === 'accepted') {
+          return res.status(200).json({ success: true, message: 'Inscrição registrada com sucesso!' });
+        }
         return await respond(503, { error: 'Configuração da campanha indisponível. Tente novamente em instantes.' });
       }
 
-      // Resolver a tag exata, incluindo contas com mais de uma página de tags.
+      // Resolver a tag exata, incluindo contas com mais de uma página de tags (com cache)
       const campaignTags = [];
-      for (let offset = 0; offset < 5000; offset += 100) {
-        const tagsResponse = await fetch(`${AC_BASE_URL}/tags?limit=100&offset=${offset}`, {
-          headers: { 'Api-Token': AC_API_KEY }
-        });
-        if (!tagsResponse.ok) throw new Error('Falha ao carregar tags da campanha IAMA.');
-        const tagsData = await tagsResponse.json();
-        const page = tagsData.tags || [];
-        campaignTags.push(...page.filter(tag =>
-          normalizeText(tag.tag).trim() === normalizeText(`${campaignPrefix} Lead`)
-        ));
-        if (page.length < 100) break;
+      let allTags = [];
+      if (cachedAcTags && (now - cachedAcTagsTime < CACHE_TTL_MS)) {
+        allTags = cachedAcTags;
+      } else {
+        for (let offset = 0; offset < 5000; offset += 100) {
+          const tagsResponse = await fetch(`${AC_BASE_URL}/tags?limit=100&offset=${offset}`, {
+            headers: { 'Api-Token': AC_API_KEY }
+          });
+          if (!tagsResponse.ok) break;
+          const tagsData = await tagsResponse.json();
+          const page = tagsData.tags || [];
+          allTags.push(...page);
+          if (page.length < 100) break;
+        }
+        if (allTags.length > 0) {
+          cachedAcTags = allTags;
+          cachedAcTagsTime = now;
+        }
       }
+      campaignTags.push(...allTags.filter(tag =>
+        normalizeText(tag.tag).trim() === normalizeText(`${campaignPrefix} Lead`)
+      ));
+
       if (campaignTags.length !== 1) {
+        console.warn('Tag da campanha IAMA ausente ou duplicada no ActiveCampaign.');
+        const webhookResult = await webhookDelivery;
+        if (webhookResult && webhookResult.outcome === 'accepted') {
+          return res.status(200).json({ success: true, message: 'Inscrição registrada com sucesso!' });
+        }
         return await respond(503, { error: 'Tag da campanha indisponível. Tente novamente em instantes.' });
       }
       tagId = String(campaignTags[0].id);
@@ -289,6 +334,12 @@ export default async function handler(req, res) {
     if (!syncResponse.ok) {
       const errorData = await syncResponse.text();
       console.error("Erro da API do ActiveCampaign (Sync):", errorData);
+      if (origin === 'iama') {
+        const webhookResult = await webhookDelivery;
+        if (webhookResult && webhookResult.outcome === 'accepted') {
+          return res.status(200).json({ success: true, message: 'Inscrição registrada com sucesso!' });
+        }
+      }
       return await respond(syncResponse.status, { error: 'Falha ao sincronizar o contato.' });
     }
 
