@@ -323,6 +323,42 @@ export default async function handler(req, res) {
       }
     }
 
+    // Envio adicional da IAMA: falhas não alteram a inscrição nem as UTMs do ActiveCampaign.
+    if (origin === 'iama') {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 2500);
+      try {
+        const webhookResponse = await fetch('https://services.leadconnectorhq.com/hooks/CjEOBshy5Npf1Ri3eL4n/webhook-trigger/f0c49ef6-827f-4f91-8f28-204be8d7209b', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: controller.signal,
+          body: JSON.stringify({
+            origin,
+            name,
+            email,
+            phone: whatsapp,
+            whatsapp,
+            graduation,
+            education_area,
+            utm_content: utm_content_val,
+            utm_term: utm_term_val,
+            utm_campaign: utm_campaign_val,
+            utm_source: utm_source_val,
+            utm_medium: utm_medium_val,
+            registered_at: currentDateTimeISO,
+            tag: '[AM][BF][POS][IAMA] Lead'
+          })
+        });
+        if (!webhookResponse.ok) {
+          console.warn('Webhook IAMA retornou status:', webhookResponse.status);
+        }
+      } catch (error) {
+        console.warn('Webhook IAMA não entregue:', error.name);
+      } finally {
+        clearTimeout(timeout);
+      }
+    }
+
     // Retorna sucesso para o front-end
     return res.status(200).json({ success: true, message: 'Inscrição registrada com sucesso!' });
 
