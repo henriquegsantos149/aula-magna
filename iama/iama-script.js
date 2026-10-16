@@ -572,7 +572,7 @@ function initSmoothScroll() {
 
 // 9. Countdown Timer
 function initCountdown() {
-  const targetDate = new Date('2026-08-05T20:00:00-03:00').getTime();
+  const targetDate = new Date('2026-11-10T20:00:00-03:00').getTime();
   const daysEl = document.getElementById('cd-days');
   const hoursEl = document.getElementById('cd-hours');
   const minsEl = document.getElementById('cd-minutes');

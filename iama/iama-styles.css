@@ -85,6 +85,7 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
   position: relative;
+  text-wrap: pretty;
 }
 
 /* Tipografia */
@@ -94,6 +95,7 @@ h3,
 h4,
 h5,
 h6 {
+  text-wrap: balance;
   font-family: var(--font-title);
   font-weight: 700;
   line-height: 1.2;
@@ -290,6 +292,7 @@ a {
 }
 
 .badge-text {
+  text-wrap: balance;
   font-size: 0.925rem;
   font-weight: 700;
   color: #ffffff;
@@ -2018,8 +2021,8 @@ a {
 .diagnostic-grid {
   display: grid;
   grid-template-columns: 1.15fr 0.85fr;
-  gap: 50px;
-  align-items: start;
+  gap: 32px 50px;
+  align-items: stretch;
 }
 
 @media (max-width: 991px) {
@@ -2030,6 +2033,7 @@ a {
 }
 
 .diagnostic-content {
+  grid-column: 1 / -1;
   display: flex;
   flex-direction: column;
 }
@@ -2052,11 +2056,19 @@ a {
 }
 
 .diagnostic-title {
+  max-width: 900px;
   margin-bottom: 16px;
 }
 
+.diagnostic-title .gradient-text {
+  display: block;
+}
+
 .diagnostic-desc {
-  margin-bottom: 32px;
+  max-width: 750px;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 0;
   font-size: 1.1rem;
 }
 
