@@ -381,7 +381,7 @@ function initLightbox() {
   });
 }
 
-// 7. Form Controls (Graduation Toggle, Phone Validation, GTM Tracking, Redirection)
+// 7. Form Controls (Graduation Toggle, Phone Validation, Redirection)
 function initFormControls() {
   const form = document.getElementById('enrollment-form');
   const gradSelect = document.getElementById('user-graduation');
@@ -463,20 +463,9 @@ function initFormControls() {
     submitBtn.innerHTML = '<i data-lucide="loader" class="animate-spin"></i> Registrando sua vaga...';
     if (typeof lucide !== 'undefined') lucide.createIcons();
 
-    // Obter parâmetros UTM da URL (Case-insensitive)
-    const urlParams = new URLSearchParams(window.location.search);
-    const lowerParams = {};
-    for (const [key, value] of urlParams.entries()) {
-      lowerParams[key.toLowerCase()] = value;
-    }
-    const getParam = (keys) => {
-      for (const key of keys) {
-        if (lowerParams[key.toLowerCase()] !== undefined) {
-          return lowerParams[key.toLowerCase()];
-        }
-      }
-      return '';
-    };
+    const campaignParams = new Map(
+      [...new URLSearchParams(window.location.search)].map(([key, value]) => [key.toLowerCase(), value])
+    );
 
     const payload = {
       origin: 'iama',
@@ -485,11 +474,11 @@ function initFormControls() {
       whatsapp: iti.getNumber(),
       graduation: gradSelect.value,
       education_area: areaInput ? areaInput.value : '',
-      utm_source: getParam(['utm_source', 'src', 'l02psiama_utm_source']),
-      utm_medium: getParam(['utm_medium', 'l02psiama_utm_medium']),
-      utm_campaign: getParam(['utm_campaign', 'l02psiama_utm_campaign']),
-      utm_content: getParam(['utm_content', 'l02psiama_utm_content']),
-      utm_term: getParam(['utm_term', 'l02psiama_utm_term'])
+      utm_content: campaignParams.get('utm_content') || '',
+      utm_term: campaignParams.get('utm_term') || '',
+      utm_campaign: campaignParams.get('utm_campaign') || '',
+      utm_source: campaignParams.get('utm_source') || '',
+      utm_medium: campaignParams.get('utm_medium') || ''
     };
 
     // Enviar para a API serverless
@@ -503,7 +492,7 @@ function initFormControls() {
     .then(async response => {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'Erro na inscrição');
-      window.location.href = 'https://tally.so/r/D4EXMN' + window.location.search;
+      window.location.href = 'https://tally.so/r/D4EXMN';
     })
     .catch(error => {
       console.error('Erro ao enviar formulário:', error);

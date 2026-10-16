@@ -1,0 +1,205 @@
+/* Campanha NOV26: aplicação exclusiva à página de Aula Magna. */
+.black-friday-theme {
+  --color-bg-deep: #050505;
+  --color-bg-dark: #0b0b0b;
+  --color-bg-card: rgba(19, 19, 19, 0.94);
+  --bf-spectrum: linear-gradient(110deg, #10b6c7 0%, #8ee322 33%, #f2cf00 57%, #ff7538 78%, #ed0068 100%);
+  background: #050505;
+}
+
+.black-friday-theme .site-header,
+.black-friday-theme .site-header.scrolled {
+  background: rgba(5, 5, 5, 0.94);
+}
+
+.black-friday-theme .hero-section {
+  background: radial-gradient(ellipse at 95% 15%, rgba(237, 0, 104, 0.09), transparent 45%),
+    radial-gradient(ellipse at 5% 85%, rgba(142, 227, 34, 0.08), transparent 45%), #050505;
+  overflow: hidden;
+}
+
+.black-friday-theme .hero-section::before,
+.black-friday-theme .hero-section::after {
+  content: '';
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border: 5px solid;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.black-friday-theme .hero-section::before {
+  top: 65px;
+  right: -90px;
+  border-color: #10b6c7 #8ee322 #8ee322 #10b6c7;
+  transform: rotate(-28deg);
+}
+
+.black-friday-theme .hero-section::after {
+  bottom: -100px;
+  left: -65px;
+  border-color: #ed0068 #ff7538 #f2cf00 #ed0068;
+  transform: rotate(-15deg);
+}
+
+.black-friday-theme .hero-container {
+  position: relative;
+  z-index: 1;
+}
+
+.bf-campaign {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  border-left: 2px solid #ed0068;
+}
+
+.bf-campaign-name {
+  font-family: var(--font-title);
+  font-size: clamp(1.1rem, 1.6vw, 1.4rem);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+
+.bf-campaign-name span {
+  display: inline-block;
+  padding: 2px 6px;
+  margin-right: 4px;
+  background: var(--bf-spectrum);
+  color: #050505;
+}
+
+.bf-campaign-brand {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.23em;
+  color: #eee;
+}
+
+.black-friday-theme .hero-content > .badge {
+  display: flex;
+  width: fit-content;
+  background: #151515;
+  border: 1px solid #424b2b;
+}
+
+.black-friday-theme .registration-card {
+  border: 1px solid transparent;
+  background: linear-gradient(#111, #111) padding-box, var(--bf-spectrum) border-box;
+  box-shadow: 0 20px 65px rgba(0, 0, 0, 0.45);
+}
+
+.black-friday-theme .hero-social-proof {
+  gap: 10px !important;
+  padding-top: 16px;
+}
+
+.black-friday-theme .avatar-placeholder {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  font-size: 0.65rem !important;
+  border-radius: 8px 0 8px 0;
+  background: #172015;
+  color: #a5cb83;
+  box-shadow: none;
+}
+
+.black-friday-theme .social-proof-text {
+  font-size: 0.78rem !important;
+  line-height: 1.5;
+  white-space: normal;
+  margin-left: 0 !important;
+  color: #a3a8ae;
+}
+
+.black-friday-theme .social-proof-text strong {
+  color: #cdd2d5;
+  font-weight: 600;
+}
+
+.black-friday-theme .card-glow-top,
+.black-friday-theme .bg-dark-layer::before,
+.black-friday-theme .bg-dark-layer::after {
+  background: var(--bf-spectrum);
+}
+
+.black-friday-theme .btn-primary {
+  background: linear-gradient(110deg, #10b6c7, #8ee322 60%, #d5ed22);
+  color: #050505;
+  box-shadow: 0 4px 20px rgba(142, 227, 34, 0.18);
+}
+
+.black-friday-theme .btn-primary:hover {
+  background: #fff;
+  color: #050505;
+}
+
+.black-friday-theme .featured-idea-wrapper,
+.black-friday-theme .nexos-carousel-container {
+  background: var(--bf-spectrum);
+}
+
+.black-friday-theme .nexos-carousel-track span {
+  color: #050505;
+}
+
+.black-friday-theme .nexos-carousel-track span::after {
+  background: #050505;
+}
+
+.black-friday-theme .bg-light-layer {
+  background-color: #f5f5f2;
+}
+
+.black-friday-theme .footer-brand {
+  align-items: flex-start;
+  max-width: 560px;
+  text-align: left !important;
+}
+
+.black-friday-theme .footer-brand p {
+  margin: 0;
+  text-align: left !important;
+  text-wrap: pretty;
+  line-height: 1.65;
+}
+
+.black-friday-theme .footer-brand .logo-wrapper {
+  flex: none;
+}
+
+.black-friday-theme .footer-bottom > p {
+  flex: 1 1 360px;
+}
+
+.black-friday-theme .footer-links {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .black-friday-theme .footer-bottom {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .black-friday-theme .footer-bottom > p {
+    flex: none;
+  }
+}
+
+@media (max-width: 991px) {
+  .bf-campaign { align-items: center; }
+  .black-friday-theme .hero-content > .badge { margin-left: auto; margin-right: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .black-friday-theme .nexos-carousel-track,
+  .black-friday-theme .pulse-glow::before { animation: none; }
+}

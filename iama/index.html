@@ -2,34 +2,7 @@
 <html lang="pt-BR">
 
 <head>
-  <!-- Google Tag Manager -->
-  <script>(function (w, d, s, l, i) {
-      w[l] = w[l] || []; w[l].push({
-        'gtm.start':
-          new Date().getTime(), event: 'gtm.js'
-      }); var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-MTZ9NFFN');</script>
-  <!-- End Google Tag Manager -->
 
-  <!-- Meta Pixel Code -->
-  <script>
-    !function (f, b, e, v, n, t, s) {
-      if (f.fbq) return; n = f.fbq = function () {
-        n.callMethod ?
-        n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-      };
-      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-      n.queue = []; t = b.createElement(e); t.async = !0;
-      t.src = v; s = b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t, s)
-    }(window, document, 'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1373287802810243');
-    fbq('track', 'PageView');
-  </script>
-  <!-- End Meta Pixel Code -->
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -71,22 +44,15 @@
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="./iama-styles.css">
+  <link rel="stylesheet" href="./black-friday.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/18.2.1/css/intlTelInput.css" />
 
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest" defer></script>
 </head>
 
-<body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MTZ9NFFN" height="0" width="0"
-      style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->
+<body class="black-friday-theme">
 
-  <!-- Meta Pixel (noscript) -->
-  <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=1373287802810243&ev=PageView&noscript=1" /></noscript>
-  <!-- End Meta Pixel (noscript) -->
 
 
   <!-- Background Glow FX -->
@@ -125,9 +91,13 @@
     <section id="hero" class="hero-section">
       <div class="container hero-container">
         <div class="hero-content reveal">
+          <div class="bf-campaign" aria-label="Black Friday Ambiental Pro">
+            <div class="bf-campaign-name"><span>BLACK</span> FRIDAY</div>
+            <span class="bf-campaign-brand">AMBIENTAL PRO</span>
+          </div>
           <div class="badge">
             <span class="badge-dot"></span>
-            <span class="badge-text">Aula Magna Gratuita • 10/11/2026 às&nbsp;20h</span>
+            <span class="badge-text">Gratuita • 10/11/2026 às&nbsp;20h</span>
           </div>
           <h1 class="hero-title">
             Aula Magna da Pós-Graduação em&nbsp;<span class="gradient-text">IA.MA</span>
@@ -165,7 +135,7 @@
             <div class="card-glow-top"></div>
             <div class="text-center" style="margin-bottom: 20px;">
               <h3 class="card-title">Inscreva-se Grátis</h3>
-              <p class="card-subtitle">Receba o link de transmissão da Aula Magna e a oferta exclusiva no grupo VIP.</p>
+              <p class="card-subtitle">Receba o link da Aula Magna e acompanhe a oferta exclusiva de Black Friday no grupo VIP.</p>
             </div>
 
             <form id="enrollment-form" class="registration-form">

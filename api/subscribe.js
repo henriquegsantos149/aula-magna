@@ -103,18 +103,51 @@ export default async function handler(req, res) {
 
     // Configuração baseada na origem da requisição
     if (origin === 'iama') {
-      fieldValues = [
-        { field: "844", value: utm_term_val },
-        { field: "847", value: getFieldValueForField("847", currentDateBR) },
-        { field: "845", value: graduation },
-        { field: "846", value: education_area },
-        { field: "840", value: utm_campaign_val },
-        { field: "841", value: utm_source_val },
-        { field: "842", value: utm_medium_val },
-        { field: "843", value: utm_content_val }
-      ].filter(f => f.value && f.value !== "");
-      
-      tagId = "470"; // [L02][PÓS][IA.MA] Lead
+      const campaignPrefix = '[AM][BF][POS][IAMA]';
+      const campaignValues = [
+        ['UTM Content', utm_content_val],
+        ['UTM Term', utm_term_val],
+        ['UTM Data de Inscrição', null],
+        ['UTM Possui Graduação', graduation],
+        ['UTM Área de Formação', education_area],
+        ['UTM Campaign', utm_campaign_val],
+        ['UTM Source', utm_source_val],
+        ['UTM Medium', utm_medium_val]
+      ];
+      const resolvedFields = campaignValues.map(([title, value]) => {
+        const matches = acFields.filter(field =>
+          normalizeText(field.title).trim() === normalizeText(`${campaignPrefix} ${title}`)
+        );
+        return { title, value, field: matches.length === 1 ? matches[0] : null };
+      });
+      if (resolvedFields.some(item => !item.field)) {
+        console.error('Campos da campanha IAMA ausentes ou duplicados:',
+          resolvedFields.filter(item => !item.field).map(item => item.title));
+        return res.status(503).json({ error: 'Configuração da campanha indisponível. Tente novamente em instantes.' });
+      }
+
+      // Resolver a tag exata, incluindo contas com mais de uma página de tags.
+      const campaignTags = [];
+      for (let offset = 0; offset < 5000; offset += 100) {
+        const tagsResponse = await fetch(`${AC_BASE_URL}/tags?limit=100&offset=${offset}`, {
+          headers: { 'Api-Token': AC_API_KEY }
+        });
+        if (!tagsResponse.ok) throw new Error('Falha ao carregar tags da campanha IAMA.');
+        const tagsData = await tagsResponse.json();
+        const page = tagsData.tags || [];
+        campaignTags.push(...page.filter(tag =>
+          normalizeText(tag.tag).trim() === normalizeText(`${campaignPrefix} Lead`)
+        ));
+        if (page.length < 100) break;
+      }
+      if (campaignTags.length !== 1) {
+        return res.status(503).json({ error: 'Tag da campanha indisponível. Tente novamente em instantes.' });
+      }
+      tagId = String(campaignTags[0].id);
+      fieldValues = resolvedFields.map(({ field, value }) => ({
+        field: String(field.id),
+        value: value === null ? getFieldValueForField(field.id, currentDateBR, true) : value
+      })).filter(field => field.value && field.value !== '');
     } else {
       // Montagem padrão para GGSR
       fieldValues = [
@@ -258,26 +291,28 @@ export default async function handler(req, res) {
     }
 
     // Passo 2: Adicionar a Tag
-    const tagPayload = {
-      contactTag: {
-        contact: contactId,
-        tag: tagId
+    if (tagId) {
+      const tagPayload = {
+        contactTag: {
+          contact: contactId,
+          tag: tagId
+        }
+      };
+
+      const tagResponse = await fetch(`${AC_BASE_URL}/contactTags`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Api-Token': AC_API_KEY
+        },
+        body: JSON.stringify(tagPayload)
+      });
+
+      if (!tagResponse.ok) {
+        const errorData = await tagResponse.text();
+        console.error(`Erro da API do ActiveCampaign (Tags) para o contato ${contactId}:`, errorData);
+        // Podemos prosseguir pois o lead principal foi criado com sucesso.
       }
-    };
-
-    const tagResponse = await fetch(`${AC_BASE_URL}/contactTags`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Api-Token': AC_API_KEY
-      },
-      body: JSON.stringify(tagPayload)
-    });
-
-    if (!tagResponse.ok) {
-      const errorData = await tagResponse.text();
-      console.error(`Erro da API do ActiveCampaign (Tags) para o contato ${contactId}:`, errorData);
-      // Podemos prosseguir pois o lead principal foi criado com sucesso.
     }
 
     // Retorna sucesso para o front-end
