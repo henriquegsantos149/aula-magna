@@ -517,6 +517,15 @@ function initFormControls() {
     submitBtn.innerHTML = '<i data-lucide="loader" class="animate-spin"></i> Registrando sua vaga...';
     if (typeof lucide !== 'undefined') lucide.createIcons();
 
+    // Disparar evento de Lead no Meta Pixel
+    try {
+      if (typeof window.fbq === 'function') {
+        window.fbq('track', 'Lead');
+      }
+    } catch (err) {
+      console.warn('Erro ao disparar Meta Pixel Lead:', err);
+    }
+
     const attribution = captureAttribution(window.location.search, campaignStorage);
     const campaign = Object.values(attribution).some(Boolean) ? attribution : entryAttribution;
 
