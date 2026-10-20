@@ -643,6 +643,18 @@ function initSmoothScroll() {
         const targetElement = document.querySelector(targetId);
         if (targetElement) {
           e.preventDefault();
+          if (targetId === '#inscricao') {
+            // No desktop, mantenha o texto e o formulário do hero visíveis juntos.
+            const scrollTarget = window.matchMedia('(min-width: 992px)').matches
+              ? document.getElementById('hero') || targetElement
+              : targetElement;
+            const headerHeight = document.getElementById('main-header')?.getBoundingClientRect().height || 0;
+            window.scrollTo({
+              top: Math.max(0, window.scrollY + scrollTarget.getBoundingClientRect().top - headerHeight - 16),
+              behavior: 'smooth'
+            });
+            return;
+          }
           targetElement.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
