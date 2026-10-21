@@ -434,7 +434,7 @@ function initFormControls() {
   });
 
   // Form Submission
-  const REDIRECT_TALLY_LINK = "https://tally.so/r/8NoA6o";
+  const REDIRECT_TALLY_LINK = "https://tally.so/r/D4Q4bp";
 
   form.addEventListener('submit', (e) => {
     const validation = validatePhone();

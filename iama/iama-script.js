@@ -550,7 +550,7 @@ function initFormControls() {
     .then(async response => {
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'Erro na inscrição');
-      window.location.href = attributionUrl('https://tally.so/r/D4EXMN', campaign);
+      window.location.href = attributionUrl('https://tally.so/r/8NoA6o', campaign);
     })
     .catch(error => {
       console.error('Erro ao enviar formulário:', error);
