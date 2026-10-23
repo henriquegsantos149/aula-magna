@@ -1,3 +1,9 @@
+import { captureAttribution, attributionUrl } from './campaign-attribution.js';
+
+let campaignStorage;
+try { campaignStorage = window.sessionStorage; } catch {}
+const entryAttribution = captureAttribution(window.location.search, campaignStorage);
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof lucide !== 'undefined') {
@@ -470,31 +476,18 @@ function initFormControls() {
       education_area: formData.get('area_formacao') || ''
     };
 
-    // Grab UTM params from URL
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirectUrl = new URL(REDIRECT_TALLY_LINK);
-    
-    urlParams.forEach((val, key) => {
-      const lowerKey = key.toLowerCase();
-      if (lowerKey.startsWith('utm_') || lowerKey.startsWith('l19psggsr_utm_') || lowerKey.startsWith('l20psggsr_utm_')) {
-        let normalizedKey = lowerKey;
-        if (lowerKey.startsWith('l19psggsr_')) {
-          normalizedKey = lowerKey.replace('l19psggsr_', '');
-        } else if (lowerKey.startsWith('l20psggsr_')) {
-          normalizedKey = lowerKey.replace('l20psggsr_', '');
-        }
-        
-        // Passar os UTMs limpos para o Tally também
-        redirectUrl.searchParams.append(normalizedKey, val);
-        leadData[normalizedKey] = val;
-      }
-    });
+    // Usar a mesma atribuição no cadastro, no GTM e no Tally.
+    const currentAttribution = captureAttribution(window.location.search, campaignStorage);
+    const campaign = Object.values(currentAttribution).some(Boolean) ? currentAttribution : entryAttribution;
+    Object.assign(leadData, campaign);
+    const redirectUrl = attributionUrl(REDIRECT_TALLY_LINK, campaign);
 
     // GTM DataLayer Push
     if (window.dataLayer) {
       window.dataLayer.push({
         event: 'formSubmission',
         formId: 'enrollment-form',
+        ...campaign,
         leadEmail: leadData.email,
         leadGraduation: leadData.graduation
       });
