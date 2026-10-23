@@ -531,15 +531,23 @@ function initFormControls() {
     })
     .then(async res => {
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        console.warn('API subscription warning:', data.error || 'Unknown warning');
+      if (!res.ok || data.success !== true) {
+        throw new Error(data.error || 'Não foi possível concluir sua inscrição. Tente novamente.');
       }
+      window.location.href = redirectUrl.toString();
     })
     .catch(err => {
-      console.error('Network error during API subscription:', err);
-    })
-    .finally(() => {
-      window.location.href = redirectUrl.toString();
+      let feedback = document.getElementById('registration-error');
+      if (!feedback) {
+        feedback = document.createElement('p');
+        feedback.id = 'registration-error';
+        feedback.setAttribute('role', 'alert');
+        submitBtn.insertAdjacentElement('beforebegin', feedback);
+      }
+      feedback.textContent = err.message || 'Erro de conexão. Tente novamente.';
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalText;
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     });
   });
 }

@@ -304,6 +304,36 @@ export default async function handler(req, res) {
     const syncResult = await syncResponse.json();
     const contactId = syncResult.contact.id;
 
+    // Na GGSR, a tag faz parte da inscrição: confirmar antes das gravações extras.
+    if (origin === 'ggsr') {
+      let tagged = false;
+      for (let attempt = 0; attempt < 2 && !tagged; attempt++) {
+        try {
+          const response = await fetch(`${AC_BASE_URL}/contactTags`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Api-Token': AC_API_KEY },
+            body: JSON.stringify({ contactTag: { contact: contactId, tag: tagId } })
+          });
+          if (!response.ok) {
+            console.error('ActiveCampaign rejeitou a tag GGSR:', response.status);
+          }
+          // Confirmar inclusive quando a associação já existia e o POST retorna erro.
+          const check = await fetch(`${AC_BASE_URL}/contacts/${contactId}/contactTags`, {
+            headers: { 'Api-Token': AC_API_KEY }
+          });
+          if (check.ok) {
+            const result = await check.json();
+            tagged = (result.contactTags || []).some(item => String(item.tag) === tagId);
+          }
+        } catch (error) {
+          console.error('Falha ao aplicar/verificar tag GGSR:', error.name);
+        }
+      }
+      if (!tagged) {
+        return await respond(503, { error: 'Não foi possível confirmar sua inscrição. Tente novamente para concluir o cadastro.' });
+      }
+    }
+
     // Passo 1.5: Buscar os fieldValues existentes do contato e atualizar (PUT) ou criar (POST) explicitamente
     try {
       const existingFvRes = await fetch(`${AC_BASE_URL}/contacts/${contactId}/fieldValues`, {
@@ -373,7 +403,7 @@ export default async function handler(req, res) {
     }
 
     // Passo 2: Adicionar a Tag
-    if (tagId) {
+    if (tagId && origin !== 'ggsr') {
       const tagPayload = {
         contactTag: {
           contact: contactId,
