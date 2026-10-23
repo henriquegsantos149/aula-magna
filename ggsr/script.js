@@ -462,6 +462,7 @@ function initFormControls() {
     const cleanTelefone = rawTelefone.replace(/\D/g, '');
 
     const leadData = {
+      origin: 'ggsr',
       name: formData.get('nome'),
       email: formData.get('email'),
       whatsapp: cleanTelefone,

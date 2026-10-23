@@ -199,8 +199,8 @@ export default async function handler(req, res) {
     let tagId = "";
 
     // Configuração baseada na origem da requisição
-    if (origin === 'iama') {
-      const campaignPrefix = '[AM][BF][POS][IAMA]';
+    if (origin === 'iama' || origin === 'ggsr') {
+      const campaignPrefix = origin === 'iama' ? '[AM][BF][POS][IAMA]' : '[AM][BF][POS][GGSR]';
       const campaignValues = [
         ['UTM Content', utm_content_val],
         ['UTM Term', utm_term_val],
@@ -218,7 +218,7 @@ export default async function handler(req, res) {
         return { title, value, field: matches.length === 1 ? matches[0] : null };
       });
       if (resolvedFields.some(item => !item.field)) {
-        console.warn('Campos da campanha IAMA ausentes ou duplicados no ActiveCampaign:',
+        console.warn(`Campos da campanha ${origin.toUpperCase()} ausentes ou duplicados no ActiveCampaign:`,
           resolvedFields.filter(item => !item.field).map(item => item.title));
         // Se o webhook foi entregue com sucesso, não bloqueia o usuário com 503
         const webhookResult = await webhookDelivery;
@@ -254,7 +254,7 @@ export default async function handler(req, res) {
       ));
 
       if (campaignTags.length !== 1) {
-        console.warn('Tag da campanha IAMA ausente ou duplicada no ActiveCampaign.');
+        console.warn(`Tag da campanha ${origin.toUpperCase()} ausente ou duplicada no ActiveCampaign.`);
         const webhookResult = await webhookDelivery;
         if (webhookResult && webhookResult.outcome === 'accepted') {
           return res.status(200).json({ success: true, message: 'Inscrição registrada com sucesso!' });
@@ -267,49 +267,7 @@ export default async function handler(req, res) {
         value: value === null ? getFieldValueForField(field.id, currentDateBR, true) : value
       })).filter(field => field.value && field.value !== '');
     } else {
-      // Montagem padrão para GGSR
-      fieldValues = [
-        // L20
-        { field: "896", value: utm_term_val },             // [L20][PÓS][GGSR] UTM Term
-        { field: "907", value: getFieldValueForField("907", currentDateBR, true) }, // [L20][PÓS][GGSR] UTM Data de Inscrição
-        { field: "898", value: graduation },                // [L20][PÓS][GGSR] UTM Possui Graduação
-        { field: "899", value: education_area },            // [L20][PÓS][GGSR] UTM Área de Formação
-        { field: "900", value: utm_campaign_val },          // [L20][PÓS][GGSR] UTM Campaign
-        { field: "904", value: utm_source_val },            // [L20][PÓS][GGSR] UTM Source
-        { field: "902", value: utm_medium_val },            // [L20][PÓS][GGSR] UTM Medium
-        { field: "903", value: utm_content_val },           // [L20][PÓS][GGSR] UTM Content
-
-        // Fallbacks adicionais de Data para GGSR
-        { field: "849", value: getFieldValueForField("849", currentDateBR) }, // [L19][PÓS][GGSR] Data de Inscrição
-        { field: "773", value: getFieldValueForField("773", currentDateBR) }, // [L18][PÓS][GGSR] Data de Inscrição
-        { field: "401", value: getFieldValueForField("401", currentDateBR) }, // [LISTA DE ESPERA] [POS GGSR] Data de Inscrição
-        { field: "352", value: getFieldValueForField("352", currentDateBR) }, // [WEBINARIO] [POS] [GGSR] [L1] Data de Inscrição
-        { field: "539", value: getFieldValueForField("539", currentDateBR) }, // [MÓDULO ZERO: PÓS GGSR] Data de Inscrição
-        { field: "43",  value: getFieldValueForField("43", currentDateBR) },  // Data
-        { field: "3",   value: getFieldValueForField("3", currentDateBR) }   // Inscricao mais recente
-      ];
-
-      // Adicionar dinamicamente todos os campos que contêm GGSR/POS/L20/Aula e Data/Inscricao descobertos no ActiveCampaign
-      if (acFields.length > 0) {
-        acFields.forEach(field => {
-          const normTitle = normalizeText(field.title);
-          // Apenas campos L20 do GGSR (evita gravar data em campos de outros cursos, ex.: [POS] [GEOPROCESSAMENTO])
-          const isL20GgsrDate = normTitle.includes('l20') && normTitle.includes('ggsr') && (normTitle.includes('data') || normTitle.includes('inscric'));
-
-          if (isL20GgsrDate) {
-            const val = field.type === 'datetime' ? currentDateTimeISO : field.type === 'date' ? currentDateYYYYMMDD : currentDateBR;
-            const existingIndex = fieldValues.findIndex(fv => String(fv.field) === String(field.id));
-            if (existingIndex >= 0) {
-              fieldValues[existingIndex].value = val;
-            } else {
-              fieldValues.push({ field: String(field.id), value: val });
-            }
-          }
-        });
-      }
-
-      fieldValues = fieldValues.filter(f => f.value && f.value !== "");
-      tagId = "486"; // [L20][PÓS][GGSR] Lead
+      return await respond(400, { error: 'Origem de inscrição inválida.' });
     }
 
     const contactPayload = {
